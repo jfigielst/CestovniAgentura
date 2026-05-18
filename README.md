@@ -1,5 +1,9 @@
 COCONUT WATER
 
+COLOR THEME
+
+https://colorhunt.co/palette/093c5d3b75976fd1d75df8d8
+
 STRUKTURA
 
 1. Úvodní stránka
