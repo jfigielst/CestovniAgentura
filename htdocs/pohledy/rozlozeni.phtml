@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+    <base href="/">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVC app I3 WEA</title>
+</head>
+
+<body>
+    <div id="infoUzivatele">
+        <?php if ($this->prihlasenyUzivatel) { ?>
+            <div>
+                <?= $this->prihlasenyUzivatel["email"] ?>
+                <a href="logout">Odhlásit se</a>
+            </div>
+        <?php } else { ?>
+            <div>
+                <a href="login">Přihlásit se</a>
+            </div>
+        <?php } ?>
+    </div>
+
+    <nav>
+        <ul>
+            <li><a href="#">stranka1</a></li>
+            <li><a href="#">stranka2</a></li>
+        </ul>
+    </nav>
+    <?php
+    $this->kontroler->vypisPohled();
+    ?>
+</body>
+
+</html>
