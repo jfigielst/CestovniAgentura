@@ -13,12 +13,13 @@
     <div id="infoUzivatele">
         <?php if (!empty($this->prihlasenyUzivatel)) { ?>
             <div>
-                <?= $this->prihlasenyUzivatel["email"] ?>
-                <a href="logout">Odhlásit se</a>
+                Přihlášen jako: <?= htmlspecialchars($this->prihlasenyUzivatel["email"]) ?>
+                | <a href="/odhlaseni">Odhlásit se</a>
             </div>
         <?php } else { ?>
             <div>
-                <a href="login">Přihlásit se</a>
+                <a href="/prihlaseni">Přihlásit se</a> | 
+                <a href="/registrace">Registrace</a>
             </div>
         <?php } ?>
     </div>

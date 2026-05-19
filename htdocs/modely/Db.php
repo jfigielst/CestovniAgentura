@@ -26,7 +26,26 @@ class Db
         }
     }
 
+    // Spustí dotaz a vrátí z něj první řádek
+    public static function dotazJeden($dotaz, $parametry = array()) {
+        $navrat = self::$spojeni->prepare($dotaz);
+        $navrat->execute($parametry);
+        return $navrat->fetch();
+    }
 
+    // Spustí dotaz a vrátí všechny jeho řádky
+    public static function dotazVsechny($dotaz, $parametry = array()) {
+        $navrat = self::$spojeni->prepare($dotaz);
+        $navrat->execute($parametry);
+        return $navrat->fetchAll();
+    }
+
+    // Spustí dotaz a vrátí počet ovlivněných řádků
+    public static function dotaz($dotaz, $parametry = array()) {
+        $navrat = self::$spojeni->prepare($dotaz);
+        $navrat->execute($parametry);
+        return $navrat->rowCount();
+    }
 
 
 }

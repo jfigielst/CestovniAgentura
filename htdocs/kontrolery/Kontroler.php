@@ -6,10 +6,16 @@ abstract class Kontroler
 
     abstract public function zpracuj($parametry);
 
+    protected $prihlasenyUzivatel;
+
     public function vypisPohled()
     {
-        extract($this->data); // vytvoří podle klíčů pole i samostatné proměnné
-        require "pohledy/{$this->pohled}.phtml";
+        if ($this->pohled) {
+            $uzivatelManager = new UzivatelManager();
+            $this->prihlasenyUzivatel = $uzivatelManager->vratUzivatele();
+            extract($this->data); // vytvoří podle klíčů pole i samostatné proměnné
+            require "pohledy/{$this->pohled}.phtml";
+        }
     }
 
     public function presmeruj($url)

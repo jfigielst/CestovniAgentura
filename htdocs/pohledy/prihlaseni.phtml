@@ -1,0 +1,18 @@
+<h2>Přihlášení</h2>
+<?php if (isset($chyba)) : ?>
+    <div style="color: red; margin-bottom: 10px;">
+        <strong><?= htmlspecialchars($chyba) ?></strong>
+    </div>
+<?php endif; ?>
+<form method="post">
+    <label>
+        E-mail<br />
+        <input type="email" name="email" required />
+    </label><br />
+    <label>
+        Heslo<br />
+        <input type="password" name="heslo" required />
+    </label><br /><br />
+    <input type="submit" value="Přihlásit" />
+</form>
+<p>Nemáte účet? <a href="/registrace">Zaregistrujte se zde.</a></p>

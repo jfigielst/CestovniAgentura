@@ -1,0 +1,26 @@
+<h2>Registrace uživatele</h2>
+<?php if (isset($chyba)) : ?>
+    <div style="color: red; margin-bottom: 10px;">
+        <strong><?= htmlspecialchars($chyba) ?></strong>
+    </div>
+<?php endif; ?>
+<form method="post">
+    <label>
+        Jméno<br />
+        <input type="text" name="jmeno" required />
+    </label><br />
+    <label>
+        Příjmení<br />
+        <input type="text" name="prijmeni" required />
+    </label><br />
+    <label>
+        E-mail<br />
+        <input type="email" name="email" required />
+    </label><br />
+    <label>
+        Heslo<br />
+        <input type="password" name="heslo" required />
+    </label><br /><br />
+    <input type="submit" value="Registrovat" />
+</form>
+<p>Již máte účet? <a href="/prihlaseni">Přihlaste se zde.</a></p>
