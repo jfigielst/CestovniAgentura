@@ -11,7 +11,7 @@
 
 <body>
     <div id="infoUzivatele">
-        <?php if ($this->prihlasenyUzivatel) { ?>
+        <?php if (!empty($this->prihlasenyUzivatel)) { ?>
             <div>
                 <?= $this->prihlasenyUzivatel["email"] ?>
                 <a href="logout">Odhlásit se</a>
