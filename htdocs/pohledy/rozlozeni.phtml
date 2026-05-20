@@ -6,33 +6,52 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MVC app I3 WEA</title>
+    <title>Venturo – cestovní kancelář</title>
+    <link rel="stylesheet" href="/css/style.css?v=<?= time() ?>">
 </head>
 
 <body>
-    <div id="infoUzivatele">
-        <?php if (!empty($this->prihlasenyUzivatel)) { ?>
-            <div>
-                Přihlášen jako: <?= htmlspecialchars($this->prihlasenyUzivatel["email"]) ?>
-                | <a href="/odhlaseni">Odhlásit se</a>
+    <header class="hlavicka">
+        <div class="hlavicka__top">
+            <a href="/uvod" class="logo"><img src="/images/logo.png" alt="Venturo CK" style="height: 65px; width: auto; display: block;"></a>
+            
+            <div class="hlavicka__uzivatel">
+                <?php if (!empty($this->prihlasenyUzivatel)) { ?>
+                    <span><?= htmlspecialchars($this->prihlasenyUzivatel["jmeno"] . " " . $this->prihlasenyUzivatel["prijmeni"]) ?></span>
+                    <a href="/uvod#ucet">Můj účet</a>
+                    <a href="/uvod#rezervace">Rezervace</a>
+                    <a href="/odhlaseni">Odhlásit se</a>
+                <?php } else { ?>
+                    <a href="/prihlaseni">Přihlásit se</a>
+                <?php } ?>
             </div>
-        <?php } else { ?>
-            <div>
-                <a href="/prihlaseni">Přihlásit se</a> | 
-                <a href="/registrace">Registrace</a>
-            </div>
-        <?php } ?>
-    </div>
+        </div>
+        <div class="hlavicka__bottom">
+            <nav class="navigace" aria-label="Hlavní navigace">
+                <ul>
+                    <li><a href="/uvod#uvod">Úvod</a></li>
+                    <li><a href="/uvod#zajezdy">Zájezdy</a></li>
+                    <li><a href="/uvod#destinace">Destinace</a></li>
+                    <li><a href="/uvod#o-nas">O nás</a></li>
+                    <li><a href="/uvod#kontakt">Kontakt</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-    <nav>
-        <ul>
-            <li><a href="#">stranka1</a></li>
-            <li><a href="#">stranka2</a></li>
-        </ul>
-    </nav>
-    <?php
-    $this->kontroler->vypisPohled();
-    ?>
+    <main>
+        <?php
+        $this->kontroler->vypisPohled();
+        ?>
+    </main>
+
+    <footer class="pata">
+        <p>&copy; <?= date("Y") ?> Venturo cestovní kancelář | <a href="/uvod#kontakt">Kontakt</a></p>
+    </footer>
+
+    <?php if ($this->kontroler instanceof UvodKontroler) { ?>
+        <script src="/js/uvod.js?v=<?= time() ?>"></script>
+    <?php } ?>
 </body>
 
 </html>
