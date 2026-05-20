@@ -1,2 +1,346 @@
-<h2>Vítejte</h2>
-<p>Toto je úvodní stránka naší aplikace.</p>
+<?php
+$jePrihlasen = !empty($prihlasenyUzivatel);
+$jmenoUzivatele = $jePrihlasen
+    ? htmlspecialchars($prihlasenyUzivatel["jmeno"] . " " . $prihlasenyUzivatel["prijmeni"])
+    : "";
+$emailUzivatele = $jePrihlasen ? htmlspecialchars($prihlasenyUzivatel["email"]) : "";
+?>
+
+<!-- 1. ÚVODNÍ STRÁNKA -->
+<section id="uvod" class="hero">
+    <video autoplay loop muted playsinline class="hero__video">
+        <source src="/videos/7358279-uhd_3840_2160_25fps.mp4" type="video/mp4">
+    </video>
+    <div class="hero__overlay"></div>
+    <div class="hero__obsah">
+        <h1>Objevte svět s Venturo</h1>
+        <p>Dovolená u moře, výpravy do hor i městské zážitky. Plánujeme cesty tak, abyste si užili každý okamžik.</p>
+        <a href="#zajezdy" class="tlacitko tlacitko--primarni">Prohlédnout zájezdy</a>
+        <a href="#o-nas" class="tlacitko tlacitko--outline" style="margin-left: 0.5rem;">Více o nás</a>
+    </div>
+</section>
+
+<form id="rychle-vyhledavani" class="vyhledavani sekce" style="padding-top: 0; padding-bottom: 2rem;">
+    <h2 class="sekce__nadpis" style="font-size: 1.25rem; margin-bottom: 1rem;">Rychlé vyhledávání</h2>
+    <div class="vyhledavani__mrizka">
+        <div style="position: relative;">
+            <label>Destinace</label>
+            <div class="dest-trigger" id="dest-trigger" tabindex="0">
+                <span id="dest-trigger-text">Všechny destinace</span>
+            </div>
+
+            <!-- Modal for Destination Picker -->
+            <div id="dest-modal" class="dest-modal">
+                <div class="dest-modal__content">
+                    <div class="dest-modal__header">
+                        <h2 style="font-size: 1.25rem; margin: 0; color: var(--barva-modra);">Zadejte zemi nebo konkrétní místo (např. Řecko apod.)</h2>
+                        <button type="button" class="dest-modal__close" aria-label="Zavřít">×</button>
+                    </div>
+                    <div class="dest-modal__search">
+                        <input type="text" id="dest-search" placeholder="Kam na dovolenou?">
+                    </div>
+                    <div class="dest-modal__grid" id="dest-grid">
+                        <?php foreach ($destinace_podle_statu as $stat => $mesta): ?>
+                            <div class="dest-state-group" data-stat="<?= htmlspecialchars($stat) ?>">
+                                <div class="dest-state-header">
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" class="cb-stat" value="<?= htmlspecialchars($stat) ?>">
+                                        <span class="checkmark"></span>
+                                        <span class="stat-name"><?= htmlspecialchars($stat) ?></span>
+                                    </label>
+                                    <button type="button" class="dest-expand-btn" aria-label="Rozbalit">v</button>
+                                </div>
+                                <div class="dest-cities">
+                                    <?php foreach ($mesta as $mesto): ?>
+                                        <label class="checkbox-container city-cb" style="font-weight: 400;">
+                                            <input type="checkbox" class="cb-mesto" name="destinace[]" value="<?= htmlspecialchars($mesto['id_destinace']) ?>" data-nazev="<?= htmlspecialchars($mesto['nazev_mesta']) ?>">
+                                            <span class="checkmark"></span>
+                                            <?= htmlspecialchars($mesto['nazev_mesta']) ?>
+                                        </label>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="dest-modal__footer">
+                        <button type="button" class="tlacitko tlacitko--primarni" id="dest-confirm-btn">POTVRDIT A VYHLEDAT</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="position: relative;">
+            <label>Letiště</label>
+            <div class="dest-trigger" id="letiste-trigger" tabindex="0">
+                <span id="letiste-trigger-text">Jakékoliv letiště</span>
+            </div>
+
+            <!-- Modal for Airport Picker -->
+            <div id="letiste-modal" class="dest-modal">
+                <div class="dest-modal__content">
+                    <div class="dest-modal__header">
+                        <h2 style="font-size: 1.25rem; margin: 0; color: var(--barva-modra);">Vyberte odletové letiště</h2>
+                        <button type="button" class="dest-modal__close" aria-label="Zavřít">×</button>
+                    </div>
+                    <div class="dest-modal__grid">
+                        <?php foreach ($letiste_podle_statu as $stat => $letiste_mesta): ?>
+                            <div class="dest-state-group" data-stat="<?= htmlspecialchars($stat) ?>">
+                                <div class="dest-state-header">
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" class="cb-stat" value="<?= htmlspecialchars($stat) ?>">
+                                        <span class="checkmark"></span>
+                                        <span class="stat-name"><?= htmlspecialchars($stat) ?></span>
+                                    </label>
+                                    <button type="button" class="dest-expand-btn" aria-label="Rozbalit">v</button>
+                                </div>
+                                <div class="dest-cities">
+                                    <?php foreach ($letiste_mesta as $mesto): ?>
+                                        <label class="checkbox-container city-cb" style="font-weight: 400;">
+                                            <input type="checkbox" class="cb-mesto" name="letiste[]" value="<?= htmlspecialchars($mesto['iata']) ?>" data-nazev="<?= htmlspecialchars($mesto['mesto']) ?> (<?= htmlspecialchars($mesto['iata']) ?>)">
+                                            <span class="checkmark"></span>
+                                            <?= htmlspecialchars($mesto['mesto']) ?> (<?= htmlspecialchars($mesto['iata']) ?>)
+                                        </label>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="dest-modal__footer">
+                        <button type="button" class="tlacitko tlacitko--primarni" id="letiste-confirm-btn">POTVRDIT A VYHLEDAT</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <label for="hledat-termin">Termín odjezdu</label>
+            <input type="date" id="hledat-termin" name="termin" />
+        </div>
+        <div class="counter-dropdown" style="position: relative;">
+            <label>Počet osob</label>
+            <div class="counter-dropdown__toggle" tabindex="0">
+                <span id="pocet-osob-text">2 dospělí</span>
+            </div>
+            <div class="counter-dropdown__menu">
+                <div class="counter-row">
+                    <span>Dospělí</span>
+                    <div class="counter-controls">
+                        <button type="button" class="btn-minus" data-target="dospeli">-</button>
+                        <input type="number" id="hledat-dospeli" name="dospeli" value="2" min="1" max="10" readonly>
+                        <button type="button" class="btn-plus" data-target="dospeli">+</button>
+                    </div>
+                </div>
+                <div class="counter-row">
+                    <span>Děti</span>
+                    <div class="counter-controls">
+                        <button type="button" class="btn-minus" data-target="deti">-</button>
+                        <input type="number" id="hledat-deti" name="deti" value="0" min="0" max="10" readonly>
+                        <button type="button" class="btn-plus" data-target="deti">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <button type="submit" class="tlacitko tlacitko--primarni" style="width: 100%;">Hledat</button>
+        </div>
+    </div>
+</form>
+
+<section class="sekce" style="padding-top: 1rem;">
+    <p style="text-align: center; max-width: 720px; margin: 0 auto; font-size: 1.1rem;">
+        Venturo je česká cestovní kancelář s více než 15 lety zkušeností. Nabízíme pečlivě vybrané zájezdy,
+        transparentní ceny a osobní přístup od prvního dotazu až po návrat domů.
+    </p>
+</section>
+
+<!-- 2. NABÍDKA ZÁJEZDŮ -->
+<section id="zajezdy" class="sekce sekce--seda">
+    <h2 class="sekce__nadpis">Nabídka zájezdů</h2>
+    <p class="sekce__podnadpis">Vyberte si z našich nejoblíbenějších destinací. Filtrujte podle destinace, ceny a délky pobytu.</p>
+
+    <div class="filtry">
+        <div>
+            <label for="filtr-destinace">Destinace</label>
+            <select id="filtr-destinace">
+                <option value="">Vše</option>
+                <!-- Zde budou destinace vygenerované z PHP -->
+            </select>
+        </div>
+        <div>
+            <label for="filtr-cena">Cena</label>
+            <select id="filtr-cena">
+                <option value="">Vše</option>
+                <option value="nizka">do 15 000 Kč</option>
+                <option value="stredni">15 000 – 30 000 Kč</option>
+                <option value="vysoka">nad 30 000 Kč</option>
+            </select>
+        </div>
+        <div>
+            <label for="filtr-delka">Délka pobytu</label>
+            <select id="filtr-delka">
+                <option value="">Vše</option>
+                <option value="7">7 dní</option>
+                <option value="10">10 dní</option>
+                <option value="14">14 dní</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="karty">
+        <!-- Zde budou zájezdy vygenerované z PHP -->
+    </div>
+
+    <div id="detail-zajezdu" class="detail-zajezdu" aria-live="polite"></div>
+
+    <!-- Skryté šablony detailů budou vygenerované z PHP -->
+</section>
+
+<!-- 3. DESTINACE -->
+<section id="destinace" class="sekce">
+    <h2 class="sekce__nadpis">Destinace</h2>
+    <p class="sekce__podnadpis">Prozkoumejte země a regiony, kam s námi můžete vyrazit.</p>
+
+    <div class="destinace-mrizka">
+        <!-- Zde budou destinace vygenerované z PHP -->
+    </div>
+</section>
+
+<!-- 4. O NÁS -->
+<section id="o-nas" class="sekce sekce--seda">
+    <h2 class="sekce__nadpis">O nás</h2>
+    <p class="sekce__podnadpis">
+        Venturo je rodinná cestovní kancelář z Prahy. Věříme, že cestování má být radost, ne starost.
+    </p>
+
+    <div class="o-nas-mrizka">
+        <div class="o-nas-box">
+            <div class="o-nas-box__ikona">✈️</div>
+            <h3>Proč si vybrat nás</h3>
+            <p>Malé skupiny, osobní přístup a zájezdy bez skrytých poplatků. Víme, kam jezdit a co doporučit.</p>
+        </div>
+        <div class="o-nas-box">
+            <div class="o-nas-box__ikona">🛡️</div>
+            <h3>Důvěryhodnost</h3>
+            <p>Jsme členem Sdružení českých cestovních kanceláří, máme pojištění proti úpadku a stovky spokojených klientů.</p>
+        </div>
+        <div class="o-nas-box">
+            <div class="o-nas-box__ikona">📋</div>
+            <h3>Komplexní servis</h3>
+            <p>Od letenek po výlety na místě – vše vyřídíte na jednom místě s českým delegátem 24/7.</p>
+        </div>
+    </div>
+</section>
+
+<!-- 5. KONTAKT -->
+<section id="kontakt" class="sekce">
+    <h2 class="sekce__nadpis">Kontakt</h2>
+    <p class="sekce__podnadpis">Máte dotaz? Napište nám nebo zavolejte – rádi poradíme.</p>
+
+    <div class="kontakt-mrizka">
+        <div class="kontakt-info">
+            <p><strong>E-mail:</strong> <a href="mailto:info@venturo.cz">info@venturo.cz</a></p>
+            <p><strong>Telefon:</strong> <a href="tel:+420777123456">+420 777 123 456</a></p>
+            <p><strong>Adresa:</strong> Václavské náměstí 1, 110 00 Praha 1</p>
+            <p><strong>Otevírací doba:</strong> Po–Pá 9:00–17:00</p>
+        </div>
+
+        <form class="formular" method="post" action="#kontakt">
+            <h3>Kontaktní formulář</h3>
+            <label>
+                Jméno
+                <input type="text" name="kontakt_jmeno" required />
+            </label>
+            <label>
+                E-mail
+                <input type="email" name="kontakt_email" required />
+            </label>
+            <label>
+                Zpráva
+                <textarea name="kontakt_zprava" required placeholder="Napište, s čím vám můžeme pomoci…"></textarea>
+            </label>
+            <button type="submit" class="tlacitko tlacitko--primarni">Odeslat zprávu</button>
+        </form>
+    </div>
+</section>
+
+
+<!-- 7. UŽIVATELSKÝ ÚČET -->
+<section id="ucet" class="sekce">
+    <h2 class="sekce__nadpis">Můj účet</h2>
+
+    <?php if ($jePrihlasen) { ?>
+        <div class="ucet-panel">
+            <h3>Osobní údaje</h3>
+            <p><strong>Jméno:</strong> <?= $jmenoUzivatele ?></p>
+            <p><strong>E-mail:</strong> <?= $emailUzivatele ?></p>
+            <p><a href="/odhlaseni" class="tlacitko tlacitko--sekundarni">Odhlásit se</a></p>
+
+            <h3 style="margin-top: 2rem;">Moje rezervace</h3>
+            <?php if (!empty($rezervace)) { ?>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Zájezd</th>
+                            <th>Termín</th>
+                            <th>Osob</th>
+                            <th>Stav</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($rezervace as $r) { ?>
+                            <tr>
+                                <td><?= htmlspecialchars($r["zajezd"]) ?></td>
+                                <td><?= htmlspecialchars($r["termin"]) ?></td>
+                                <td><?= (int) $r["osob"] ?></td>
+                                <td><?= htmlspecialchars($r["stav"]) ?></td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+            <?php } else { ?>
+                <p>Zatím nemáte žádné rezervace. Vytvořte první v sekci <a href="#rezervace">Rezervace zájezdu</a>.</p>
+            <?php } ?>
+        </div>
+    <?php } else { ?>
+        <div class="upozorneni">
+            Pro zobrazení účtu a rezervací se prosím <a href="#prihlaseni">přihlaste</a> nebo <a href="#prihlaseni">zaregistrujte</a>.
+        </div>
+    <?php } ?>
+</section>
+
+<!-- 8. REZERVACE ZÁJEZDU -->
+<section id="rezervace" class="sekce sekce--seda">
+    <h2 class="sekce__nadpis">Rezervace zájezdu</h2>
+    <p class="sekce__podnadpis">Vyberte termín, zadejte počet osob a odešlete rezervaci. Služba je určena přihlášeným uživatelům.</p>
+
+    <?php if ($jePrihlasen) { ?>
+        <form id="form-rezervace" class="formular ucet-panel" style="max-width: 560px; margin: 0 auto;">
+            <label>
+                Zájezd
+                <select name="zajezd" required>
+                    <option value="">— vyberte zájezd —</option>
+                    <!-- Zde budou zájezdy vygenerované z PHP -->
+                </select>
+            </label>
+            <label>
+                Termín odjezdu
+                <select name="termin" required>
+                    <option value="">— vyberte termín —</option>
+                    <!-- Zde budou termíny vygenerované z PHP -->
+                </select>
+            </label>
+            <label>
+                Počet osob
+                <input type="number" name="osob" min="1" max="10" value="2" required />
+            </label>
+            <label>
+                Poznámka (volitelné)
+                <textarea name="poznamka" placeholder="Speciální požadavky, dietní omezení…"></textarea>
+            </label>
+            <button type="submit" class="tlacitko tlacitko--primarni">Odeslat rezervaci</button>
+        </form>
+    <?php } else { ?>
+        <div class="upozorneni" style="max-width: 640px; margin: 0 auto;">
+            Rezervaci mohou odesílat pouze přihlášení uživatelé.
+            <a href="#prihlaseni">Přihlaste se</a> nebo se <a href="#prihlaseni">zaregistrujte</a>.
+        </div>
+    <?php } ?>
+</section>
