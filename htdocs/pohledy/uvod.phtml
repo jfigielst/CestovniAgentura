@@ -15,7 +15,7 @@ $emailUzivatele = $jePrihlasen ? htmlspecialchars($prihlasenyUzivatel["email"]) 
     <div class="hero__obsah">
         <h1>Objevte svět s <span class="font-beach">Venturo</span></h1>
         <p>Dovolená u moře, výpravy do hor i městské zážitky. Plánujeme cesty tak, abyste si užili každý okamžik.</p>
-        <a href="#zajezdy" class="tlacitko tlacitko--primarni">Prohlédnout zájezdy</a>
+        <a href="/zajezdy" class="tlacitko tlacitko--primarni">Prohlédnout zájezdy</a>
         <a href="#o-nas" class="tlacitko tlacitko--outline" style="margin-left: 0.5rem;">Více o nás</a>
     </div>
 </section>
@@ -23,92 +23,35 @@ $emailUzivatele = $jePrihlasen ? htmlspecialchars($prihlasenyUzivatel["email"]) 
 <form id="rychle-vyhledavani" action="/hledani" method="GET" class="vyhledavani sekce rychle-vyhledavani-sekce">
     <h2 class="sekce__nadpis rychle-vyhledavani-nadpis">Rychlé vyhledávání</h2>
     <div class="vyhledavani__mrizka">
-        <div class="vyhledavani__polozka-obal">
+        <div style="position: relative;">
             <label>Destinace</label>
-            <div class="dest-trigger" id="dest-trigger" tabindex="0">
-                <span id="dest-trigger-text">Všechny destinace</span>
-            </div>
-
-            <!-- Modal for Destination Picker -->
-            <div id="dest-modal" class="dest-modal">
-                <div class="dest-modal__content">
-                    <div class="dest-modal__header">
-                        <h2 class="vyhledavani__modal-title">Zadejte zemi nebo konkrétní místo (např. Řecko apod.)</h2>
-                        <button type="button" class="dest-modal__close" aria-label="Zavřít">×</button>
-                    </div>
-                    <div class="dest-modal__search">
-                        <input type="text" id="dest-search" placeholder="Kam na dovolenou?">
-                    </div>
-                    <div class="dest-modal__grid" id="dest-grid">
-                        <?php foreach ($destinace_podle_statu as $stat => $mesta): ?>
-                            <div class="dest-state-group" data-stat="<?= htmlspecialchars($stat) ?>">
-                                <div class="dest-state-header">
-                                    <label class="checkbox-container">
-                                        <input type="checkbox" class="cb-stat" value="<?= htmlspecialchars($stat) ?>">
-                                        <span class="checkmark"></span>
-                                        <span class="stat-name"><?= htmlspecialchars($stat) ?></span>
-                                    </label>
-                                    <button type="button" class="dest-expand-btn" aria-label="Rozbalit">v</button>
-                                </div>
-                                <div class="dest-cities">
-                                    <?php foreach ($mesta as $mesto): ?>
-                                        <label class="checkbox-container city-cb checkbox-label-regular">
-                                            <input type="checkbox" class="cb-mesto" name="destinace[]" value="<?= htmlspecialchars($mesto['id_destinace']) ?>" data-nazev="<?= htmlspecialchars($mesto['nazev_mesta']) ?>">
-                                            <span class="checkmark"></span>
-                                            <?= htmlspecialchars($mesto['nazev_mesta']) ?>
-                                        </label>
-                                    <?php endforeach; ?>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                    <div class="dest-modal__footer">
-                        <button type="button" class="tlacitko tlacitko--primarni" id="dest-confirm-btn">POTVRDIT A VYHLEDAT</button>
-                    </div>
-                </div>
-            </div>
+            <?php 
+            $prefix = 'dest';
+            $nadpis = 'Zadejte zemi nebo konkrétní místo (např. Řecko apod.)';
+            $placeholder = 'Kam na dovolenou?';
+            $data = $destinace_podle_statu;
+            $isMulti = true;
+            $inputName = 'destinace[]';
+            $defaultText = 'Všechny destinace';
+            $hodnotaId = 'id_destinace';
+            $hodnotaNazev = 'nazev_mesta';
+            include 'komponenty/vyber_destinace.phtml'; 
+            ?>
         </div>
-        <div class="vyhledavani__polozka-obal">
+        <div style="position: relative;">
             <label>Letiště</label>
-            <div class="dest-trigger" id="letiste-trigger" tabindex="0">
-                <span id="letiste-trigger-text">Jakékoliv letiště</span>
-            </div>
-
-            <!-- Modal for Airport Picker -->
-            <div id="letiste-modal" class="dest-modal">
-                <div class="dest-modal__content">
-                    <div class="dest-modal__header">
-                        <h2 class="vyhledavani__modal-title">Vyberte odletové letiště</h2>
-                        <button type="button" class="dest-modal__close" aria-label="Zavřít">×</button>
-                    </div>
-                    <div class="dest-modal__grid">
-                        <?php foreach ($letiste_podle_statu as $stat => $letiste_mesta): ?>
-                            <div class="dest-state-group" data-stat="<?= htmlspecialchars($stat) ?>">
-                                <div class="dest-state-header">
-                                    <label class="checkbox-container">
-                                        <input type="checkbox" class="cb-stat" value="<?= htmlspecialchars($stat) ?>">
-                                        <span class="checkmark"></span>
-                                        <span class="stat-name"><?= htmlspecialchars($stat) ?></span>
-                                    </label>
-                                    <button type="button" class="dest-expand-btn" aria-label="Rozbalit">v</button>
-                                </div>
-                                <div class="dest-cities">
-                                    <?php foreach ($letiste_mesta as $mesto): ?>
-                                        <label class="checkbox-container city-cb checkbox-label-regular">
-                                            <input type="checkbox" class="cb-mesto" name="letiste[]" value="<?= htmlspecialchars($mesto['iata']) ?>" data-nazev="<?= htmlspecialchars($mesto['mesto']) ?> (<?= htmlspecialchars($mesto['iata']) ?>)">
-                                            <span class="checkmark"></span>
-                                            <?= htmlspecialchars($mesto['mesto']) ?> (<?= htmlspecialchars($mesto['iata']) ?>)
-                                        </label>
-                                    <?php endforeach; ?>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                    <div class="dest-modal__footer">
-                        <button type="button" class="tlacitko tlacitko--primarni" id="letiste-confirm-btn">POTVRDIT A VYHLEDAT</button>
-                    </div>
-                </div>
-            </div>
+            <?php 
+            $prefix = 'letiste';
+            $nadpis = 'Vyberte odletové letiště';
+            $placeholder = 'Odkud poletíte?';
+            $data = $letiste_podle_statu;
+            $isMulti = true;
+            $inputName = 'letiste[]';
+            $defaultText = 'Jakékoliv letiště';
+            $hodnotaId = 'iata';
+            $hodnotaNazev = 'mesto';
+            include 'komponenty/vyber_destinace.phtml'; 
+            ?>
         </div>
         <div>
             <label for="hledat-termin">Termín odjezdu</label>
@@ -143,6 +86,41 @@ $emailUzivatele = $jePrihlasen ? htmlspecialchars($prihlasenyUzivatel["email"]) 
         </div>
     </div>
 </form>
+
+<section class="sekce uvod-nejnovejsi-sekce" style="margin-top: 3rem;">
+    <h2 class="sekce__nadpis" style="text-align: center; margin-bottom: 2rem;">Nově přidané zájezdy</h2>
+    <div class="karty">
+        <?php if (!empty($nejnovejsi_zajezdy)): ?>
+            <?php foreach ($nejnovejsi_zajezdy as $z): ?>
+                <?php
+                    $delkaPobytu = '?';
+                    if (!empty($z['terminy'])) {
+                        $datetime1 = new DateTime($z['terminy'][0]['datum_od']);
+                        $datetime2 = new DateTime($z['terminy'][0]['datum_do']);
+                        $interval = $datetime1->diff($datetime2);
+                        $delkaPobytu = $interval->days;
+                    }
+                ?>
+                <div class="karta" data-zajezd>
+                    <div class="karta__obrazek" style="background-image: url('<?= htmlspecialchars($z['obrazky'] ? $z['obrazky'] : '/images/noimage.png') ?>');"></div>
+                    <div class="karta__telo">
+                        <h3><?= htmlspecialchars($z['hotel']) ?></h3>
+                        <p class="karta__meta">📍 <?= htmlspecialchars($z['destinace']) ?>, <?= htmlspecialchars($z['stat']) ?></p>
+                        <div class="karta__tagy">
+                            <span class="tag"><?= htmlspecialchars($z['strava']) ?></span>
+                            <span class="tag"><?= $delkaPobytu ?> dní</span>
+                        </div>
+                        <p class="karta__popis">
+                            <?= htmlspecialchars(mb_strimwidth($z['popis'], 0, 100, '...')) ?>
+                        </p>
+                        <div class="karta__cena"><?= number_format($z['cena'], 0, ',', ' ') ?> Kč</div>
+                        <a href="/detail-zajezdu/<?= $z['id_zajezdu'] ?>" class="tlacitko tlacitko--primarni tlacitko--blok">Zobrazit zájezd</a>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+</section>
 
 <section class="sekce uvod-popisek-sekce">
     <p class="uvod-popisek">
