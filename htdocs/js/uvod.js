@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
     var filtrDestinace = document.getElementById("filtr-destinace");
-    var filtrCena = document.getElementById("filtr-cena");
-    var filtrDelka = document.getElementById("filtr-delka");
+    // Získáme formulářové prvky z nových komponent (pokud neexistují selecty)
+    var filtrCenaSelect = document.getElementById("filtr-cena");
+    var filtrDelkaSelect = document.getElementById("filtr-delka");
     var karty = document.querySelectorAll("[data-zajezd]");
     var detail = document.getElementById("detail-zajezdu");
 
@@ -16,29 +17,54 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function filtrujZajezdy() {
-        var dest = filtrDestinace ? filtrDestinace.value : "";
-        var cena = filtrCena ? filtrCena.value : "";
-        var delka = filtrDelka ? filtrDelka.value : "";
+        var vybranaCena = document.querySelector('input[name="filtr-cena"]:checked');
+        var cena = filtrCenaSelect ? filtrCenaSelect.value : (vybranaCena ? vybranaCena.value : "");
+        
+        var vybranaDelka = document.querySelector('input[name="filtr-delka"]:checked');
+        var delka = filtrDelkaSelect ? filtrDelkaSelect.value : (vybranaDelka ? vybranaDelka.value : "");
+        
+        // Získání vybraných destinací z nového modálu (pokud jsme na stránce zajezdy)
+        var vybraneDestinace = [];
+        var modalCheckboxu = document.querySelectorAll('#filtr-dest-modal .cb-mesto:checked');
+        modalCheckboxu.forEach(function(cb) {
+            vybraneDestinace.push(cb.value);
+        });
 
         karty.forEach(function (karta) {
             var zobrazit = true;
-            if (dest && karta.dataset.destinace !== dest) zobrazit = false;
-            // Pokud filtrujeme podle státu (a není vybrána konkrétní destinace)
-            if (!dest && vybranyStat && karta.dataset.stat !== vybranyStat) zobrazit = false;
+            
+            // Filtrování podle vícero destinací
+            if (vybraneDestinace.length > 0) {
+                if (!vybraneDestinace.includes(karta.dataset.destinace)) {
+                    zobrazit = false;
+                }
+            } else if (vybranyStat && karta.dataset.stat !== vybranyStat) {
+                // Ponecháme funkčnost starého URL filtru přes stát, pokud nejsou naklikané destinace
+                zobrazit = false;
+            }
+
             if (cena && karta.dataset.cena !== cena) zobrazit = false;
             if (delka && karta.dataset.delka !== delka) zobrazit = false;
             karta.classList.toggle("skryte", !zobrazit);
         });
     }
 
-    if (filtrDestinace) {
-        filtrDestinace.addEventListener("change", function() {
-            vybranyStat = ""; // zrušíme filtr na stát při ruční změně destinace
+    // Při změně checkboxu v novém modálu zavolat filtr
+    document.querySelectorAll('#filtr-dest-modal .cb-mesto, #filtr-dest-modal .cb-stat').forEach(function(el) {
+        el.addEventListener("change", function() {
+            vybranyStat = ""; // zrušíme statický filtr na stát
             filtrujZajezdy();
         });
-    }
-    if (filtrCena) filtrCena.addEventListener("change", filtrujZajezdy);
-    if (filtrDelka) filtrDelka.addEventListener("change", filtrujZajezdy);
+    });
+    
+    // Pro staré selecty
+    if (filtrCenaSelect) filtrCenaSelect.addEventListener("change", filtrujZajezdy);
+    if (filtrDelkaSelect) filtrDelkaSelect.addEventListener("change", filtrujZajezdy);
+    
+    // Pro nové radio inputy
+    document.querySelectorAll('input[name="filtr-cena"], input[name="filtr-delka"]').forEach(function(el) {
+        el.addEventListener("change", filtrujZajezdy);
+    });
 
     // Spustíme filtrování při načtení, pokud jsou předány parametry
     if (urlDest || urlStat) {
@@ -103,116 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // Modal logika pro destinace a letiste
-    function setupModalLogic(prefix, defaultText, pluralText) {
-        var trigger = document.getElementById(prefix + '-trigger');
-        var modal = document.getElementById(prefix + '-modal');
-        if (!trigger || !modal) return;
-
-        var closeBtn = modal.querySelector('.dest-modal__close');
-        var confirmBtn = document.getElementById(prefix + '-confirm-btn');
-        var search = document.getElementById(prefix + '-search');
-        var triggerText = document.getElementById(prefix + '-trigger-text');
-
-        trigger.addEventListener('click', function() {
-            modal.classList.add('open');
-            document.body.style.overflow = 'hidden';
-        });
-
-        var zavriModal = function() {
-            modal.classList.remove('open');
-            document.body.style.overflow = '';
-            aktualizujZobrazenyText();
-        };
-
-        if (closeBtn) closeBtn.addEventListener('click', zavriModal);
-        if (confirmBtn) confirmBtn.addEventListener('click', zavriModal);
-        modal.addEventListener('click', function(e) {
-            if(e.target === modal) zavriModal();
-        });
-
-        if (search) {
-            search.addEventListener('input', function(e) {
-                var term = e.target.value.toLowerCase();
-                modal.querySelectorAll('.dest-state-group').forEach(function(group) {
-                    var stateName = group.querySelector('.stat-name').textContent.toLowerCase();
-                    var cities = group.querySelectorAll('.city-cb');
-                    var matchFound = stateName.includes(term);
-
-                    cities.forEach(function(city) {
-                        if (city.textContent.toLowerCase().includes(term)) {
-                            matchFound = true;
-                            city.style.display = '';
-                        } else {
-                            if (!stateName.includes(term)) {
-                                city.style.display = 'none';
-                            } else {
-                                city.style.display = '';
-                            }
-                        }
-                    });
-
-                    if (matchFound) {
-                        group.style.display = '';
-                    } else {
-                        group.style.display = 'none';
-                    }
-                });
-            });
-        }
-
-        modal.querySelectorAll('.dest-expand-btn').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                var citiesContainer = btn.parentElement.nextElementSibling;
-                citiesContainer.classList.toggle('open');
-                btn.textContent = citiesContainer.classList.contains('open') ? '^' : 'v';
-            });
-        });
-
-        modal.querySelectorAll('.cb-stat').forEach(function(cb) {
-            cb.addEventListener('change', function() {
-                var checked = this.checked;
-                var group = this.closest('.dest-state-group');
-                group.querySelectorAll('.cb-mesto').forEach(function(cityCb) {
-                    cityCb.checked = checked;
-                });
-            });
-        });
-
-        modal.querySelectorAll('.cb-mesto').forEach(function(cb) {
-            cb.addEventListener('change', function() {
-                var group = this.closest('.dest-state-group');
-                var total = group.querySelectorAll('.cb-mesto').length;
-                var checked = group.querySelectorAll('.cb-mesto:checked').length;
-                var stateCb = group.querySelector('.cb-stat');
-                
-                if (checked === 0) {
-                    stateCb.checked = false;
-                    stateCb.indeterminate = false;
-                } else if (checked === total) {
-                    stateCb.checked = true;
-                    stateCb.indeterminate = false;
-                } else {
-                    stateCb.checked = false;
-                    stateCb.indeterminate = true;
-                }
-            });
-        });
-
-        function aktualizujZobrazenyText() {
-            var selectedCities = modal.querySelectorAll('.cb-mesto:checked');
-            if (selectedCities.length === 0) {
-                triggerText.textContent = defaultText;
-            } else if (selectedCities.length === 1) {
-                triggerText.textContent = selectedCities[0].getAttribute('data-nazev');
-            } else {
-                triggerText.textContent = "Vybráno " + selectedCities.length + " " + pluralText;
-            }
-        }
-    }
-
-    setupModalLogic('dest', 'Všechny destinace', 'destinací');
-    setupModalLogic('letiste', 'Jakékoliv letiště', 'letišť');
+    // Modal logika pro destinace a letiste byla presunuta do vyber_destinace.js
 
 
 
