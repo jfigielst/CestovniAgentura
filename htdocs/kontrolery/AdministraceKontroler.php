@@ -132,12 +132,22 @@ class AdministraceKontroler extends Kontroler
         // --- NAČTENÍ DAT PRO VÝPISY ---
 
         // Destinace pro dropdown u nového zájezdu
-        $this->data['destinace'] = Db::dotazVsechny('
+        $destinaceFlat = Db::dotazVsechny('
             SELECT d.*, s.nazev AS stat 
             FROM destinace d 
             JOIN staty s ON d.id_statu = s.id_statu 
             ORDER BY s.nazev ASC, d.nazev_mesta ASC
         ');
+        $destinacePodleStatu = array();
+        foreach ($destinaceFlat as $d) {
+            $stat = $d['stat'] ? $d['stat'] : 'Ostatní';
+            if (!isset($destinacePodleStatu[$stat])) {
+                $destinacePodleStatu[$stat] = array();
+            }
+            $destinacePodleStatu[$stat][] = $d;
+        }
+        $this->data['destinace'] = $destinaceFlat; // Původní pro výpisy
+        $this->data['destinace_podle_statu'] = $destinacePodleStatu;
 
         // Všechny zájezdy
         $this->data['zajezdy'] = Db::dotazVsechny('
