@@ -296,10 +296,11 @@ a {
     width: 100%;
     padding: 0.6rem 0.75rem;
     border: 1px solid var(--barva-border);
-    border-radius: 8px;
+    border-radius: var(--zaobleni);
     font-size: 1rem;
     background: var(--barva-input-pozadi);
     color: var(--barva-text);
+    height: 44px;
 }
 
 /* Counter Dropdown */
@@ -307,7 +308,7 @@ a {
     width: 100%;
     padding: 0.6rem 0.75rem;
     border: 1px solid var(--barva-border);
-    border-radius: 8px;
+    border-radius: var(--zaobleni);
     font-size: 1rem;
     background: var(--barva-input-pozadi);
     color: var(--barva-text);
@@ -759,17 +760,35 @@ a {
     font-weight: 500;
 }
 
+.formular input:focus,
+.formular textarea:focus,
+.formular select:focus,
+.formular .dest-trigger:focus,
+.vyhledavani input:focus,
+.vyhledavani select:focus,
+.dest-trigger:focus {
+    outline: none;
+    border-color: var(--barva-modra);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
 .formular input,
 .formular textarea,
-.formular select {
+.formular select,
+.formular .dest-trigger {
     width: 100%;
     padding: 0.6rem 0.75rem;
     margin-top: 0.35rem;
     border: 1px solid var(--barva-border);
-    border-radius: 8px;
+    border-radius: var(--zaobleni);
     font: inherit;
     background: var(--barva-input-pozadi);
     color: var(--barva-text);
+}
+.formular input,
+.formular select,
+.formular .dest-trigger {
+    height: 44px;
 }
 .formular input[readonly] {
     background: var(--barva-tab-pozadi);
@@ -1273,11 +1292,12 @@ a {
     width: 100%;
     padding: 0.6rem 0.75rem;
     border: 1px solid var(--barva-border);
-    border-radius: 8px;
+    border-radius: var(--zaobleni);
     font-family: inherit;
     font-size: 1rem;
     background: var(--barva-input-pozadi);
     color: var(--barva-text);
+    height: 44px;
 }
 .zajezd-detail__rezervovat-tlacitko {
     width: 100%;
