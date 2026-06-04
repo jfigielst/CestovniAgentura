@@ -16,6 +16,20 @@ class Zajezdy
     }
 
     /**
+     * Vrátí x nejnověji přidaných zájezdů (podle ID).
+     */
+    public function vratNejnovejsiZajezdy($limit = 10)
+    {
+        $limit = (int)$limit;
+        $sql = 'SELECT z.*, d.nazev_mesta AS destinace, s.nazev AS stat
+                FROM zajezdy z
+                LEFT JOIN destinace d ON z.id_destinace = d.id_destinace
+                LEFT JOIN staty s ON d.id_statu = s.id_statu
+                ORDER BY z.id_zajezdu DESC LIMIT ' . $limit;
+        return Db::dotazVsechny($sql);
+    }
+
+    /**
      * Vrátí konkrétní zájezd podle ID.
      */
     public function vratZajezd($idZajezdu)
