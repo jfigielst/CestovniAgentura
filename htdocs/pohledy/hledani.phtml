@@ -43,10 +43,10 @@ $jePrihlasen = !empty($prihlasenyUzivatel);
                         <div style="padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1;">
                             <h3 style="margin-top: 0; margin-bottom: 0.5rem; font-size: 1.25rem; color: var(--barva-modra);"><?= htmlspecialchars($hotel['hotel']) ?></h3>
                             <p style="color: var(--barva-seda); font-size: 0.9rem; margin: 0 0 0.5rem 0;">
-                                📍 <?= htmlspecialchars($hotel['destinace']) ?>, <?= htmlspecialchars($hotel['stat']) ?>
+                                Místo: <?= htmlspecialchars($hotel['destinace']) ?>, <?= htmlspecialchars($hotel['stat']) ?>
                             </p>
                             <p style="font-size: 0.85rem; color: var(--barva-seda); font-weight: bold; margin: 0 0 1rem 0;">
-                                📅 <?= date('d.m.Y', strtotime($hotel['datum_od'])) ?> – <?= date('d.m.Y', strtotime($hotel['datum_do'])) ?> (<?= $delkaPobytu ?> dní)
+                                Termín: <?= date('d.m.Y', strtotime($hotel['datum_od'])) ?> – <?= date('d.m.Y', strtotime($hotel['datum_do'])) ?> (<?= $delkaPobytu ?> dní)
                             </p>
                             <p style="font-size: 0.9rem; line-height: 1.4; color: var(--barva-text); margin: 0 0 1.5rem 0; flex-grow: 1;">
                                 <?= htmlspecialchars($hotel['popis']) ?>
