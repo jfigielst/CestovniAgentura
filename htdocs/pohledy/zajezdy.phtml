@@ -5,30 +5,51 @@
     <div class="filtry">
         <div>
             <label for="filtr-destinace">Destinace</label>
-            <select id="filtr-destinace">
-                <option value="">Vše</option>
-                <?php foreach ($destinace as $d): ?>
-                    <option value="<?= htmlspecialchars($d['id_destinace']) ?>"><?= htmlspecialchars($d['nazev_mesta'] . ' (' . $d['stat'] . ')') ?></option>
-                <?php endforeach; ?>
-            </select>
+            <?php 
+            $prefix = 'filtr-dest';
+            $nadpis = 'Filtrovat podle destinace';
+            $placeholder = 'Hledat destinaci...';
+            $data = $destinace_podle_statu;
+            $isMulti = true; // Ve filtru můžeme umožnit více
+            $inputName = 'filtr-destinace'; // Není to sice odesílané klasicky, ale uvod.js reaguje na změnu id
+            $defaultText = 'Všechny destinace';
+            $hodnotaId = 'id_destinace';
+            $hodnotaNazev = 'nazev_mesta';
+            include 'komponenty/vyber_destinace.phtml'; 
+            ?>
+            <input type="hidden" id="filtr-destinace">
         </div>
         <div>
             <label for="filtr-cena">Cena</label>
-            <select id="filtr-cena">
-                <option value="">Vše</option>
-                <option value="nizka">do 15 000 Kč</option>
-                <option value="stredni">15 000 – 30 000 Kč</option>
-                <option value="vysoka">nad 30 000 Kč</option>
-            </select>
+            <?php 
+            $prefix = 'filtr-cena';
+            $nadpis = 'Vyberte cenovou relaci';
+            $data = [
+                'nizka' => 'do 15 000 Kč',
+                'stredni' => '15 000 – 30 000 Kč',
+                'vysoka' => 'nad 30 000 Kč'
+            ];
+            $isMulti = false;
+            $inputName = 'filtr-cena';
+            $defaultText = 'Všechny ceny';
+            include 'komponenty/vyber_obecny.phtml'; 
+            ?>
         </div>
         <div>
             <label for="filtr-delka">Délka pobytu</label>
-            <select id="filtr-delka">
-                <option value="">Vše</option>
-                <option value="7">7 dní</option>
-                <option value="10">10 dní</option>
-                <option value="14">14 dní</option>
-            </select>
+            <?php 
+            $prefix = 'filtr-delka';
+            $nadpis = 'Délka pobytu';
+            $data = [
+                '7' => '7 dní',
+                '10' => '10 dní',
+                '14' => '14 dní'
+            ];
+            $isMulti = false;
+            $inputName = 'filtr-delka';
+            $defaultText = 'Libovolná délka';
+            include 'komponenty/vyber_obecny.phtml'; 
+            ?>
         </div>
     </div>
 
