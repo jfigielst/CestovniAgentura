@@ -12,6 +12,9 @@ class HledaniKontroler extends Kontroler
 
         // Přečtení zadaných parametrů z GET
         $destinaceIds = isset($_GET['destinace']) ? $_GET['destinace'] : [];
+        if (!is_array($destinaceIds) && !empty($destinaceIds)) {
+            $destinaceIds = [$destinaceIds];
+        }
         $termin = isset($_GET['termin']) ? $_GET['termin'] : '';
         $dospeli = isset($_GET['dospeli']) ? (int)$_GET['dospeli'] : 2;
         $deti = isset($_GET['deti']) ? (int)$_GET['deti'] : 0;
