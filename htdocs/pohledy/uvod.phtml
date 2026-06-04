@@ -1,0 +1,152 @@
+<?php
+$jePrihlasen = !empty($prihlasenyUzivatel);
+$jmenoUzivatele = $jePrihlasen
+    ? htmlspecialchars($prihlasenyUzivatel["jmeno"] . " " . $prihlasenyUzivatel["prijmeni"])
+    : "";
+$emailUzivatele = $jePrihlasen ? htmlspecialchars($prihlasenyUzivatel["email"]) : "";
+?>
+
+<!-- 1. ÚVODNÍ STRÁNKA -->
+<section id="uvod" class="hero">
+    <video autoplay loop muted playsinline class="hero__video">
+        <source src="/videos/7358279-uhd_3840_2160_25fps.mp4" type="video/mp4">
+    </video>
+    <div class="hero__overlay"></div>
+    <div class="hero__obsah">
+        <h1>Objevte svět s <span class="font-beach">Venturo</span></h1>
+        <p>Dovolená u moře, výpravy do hor i městské zážitky. Plánujeme cesty tak, abyste si užili každý okamžik.</p>
+        <a href="#zajezdy" class="tlacitko tlacitko--primarni">Prohlédnout zájezdy</a>
+        <a href="#o-nas" class="tlacitko tlacitko--outline" style="margin-left: 0.5rem;">Více o nás</a>
+    </div>
+</section>
+
+<form id="rychle-vyhledavani" action="/hledani" method="GET" class="vyhledavani sekce rychle-vyhledavani-sekce">
+    <h2 class="sekce__nadpis rychle-vyhledavani-nadpis">Rychlé vyhledávání</h2>
+    <div class="vyhledavani__mrizka">
+        <div class="vyhledavani__polozka-obal">
+            <label>Destinace</label>
+            <div class="dest-trigger" id="dest-trigger" tabindex="0">
+                <span id="dest-trigger-text">Všechny destinace</span>
+            </div>
+
+            <!-- Modal for Destination Picker -->
+            <div id="dest-modal" class="dest-modal">
+                <div class="dest-modal__content">
+                    <div class="dest-modal__header">
+                        <h2 class="vyhledavani__modal-title">Zadejte zemi nebo konkrétní místo (např. Řecko apod.)</h2>
+                        <button type="button" class="dest-modal__close" aria-label="Zavřít">×</button>
+                    </div>
+                    <div class="dest-modal__search">
+                        <input type="text" id="dest-search" placeholder="Kam na dovolenou?">
+                    </div>
+                    <div class="dest-modal__grid" id="dest-grid">
+                        <?php foreach ($destinace_podle_statu as $stat => $mesta): ?>
+                            <div class="dest-state-group" data-stat="<?= htmlspecialchars($stat) ?>">
+                                <div class="dest-state-header">
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" class="cb-stat" value="<?= htmlspecialchars($stat) ?>">
+                                        <span class="checkmark"></span>
+                                        <span class="stat-name"><?= htmlspecialchars($stat) ?></span>
+                                    </label>
+                                    <button type="button" class="dest-expand-btn" aria-label="Rozbalit">v</button>
+                                </div>
+                                <div class="dest-cities">
+                                    <?php foreach ($mesta as $mesto): ?>
+                                        <label class="checkbox-container city-cb checkbox-label-regular">
+                                            <input type="checkbox" class="cb-mesto" name="destinace[]" value="<?= htmlspecialchars($mesto['id_destinace']) ?>" data-nazev="<?= htmlspecialchars($mesto['nazev_mesta']) ?>">
+                                            <span class="checkmark"></span>
+                                            <?= htmlspecialchars($mesto['nazev_mesta']) ?>
+                                        </label>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="dest-modal__footer">
+                        <button type="button" class="tlacitko tlacitko--primarni" id="dest-confirm-btn">POTVRDIT A VYHLEDAT</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="vyhledavani__polozka-obal">
+            <label>Letiště</label>
+            <div class="dest-trigger" id="letiste-trigger" tabindex="0">
+                <span id="letiste-trigger-text">Jakékoliv letiště</span>
+            </div>
+
+            <!-- Modal for Airport Picker -->
+            <div id="letiste-modal" class="dest-modal">
+                <div class="dest-modal__content">
+                    <div class="dest-modal__header">
+                        <h2 class="vyhledavani__modal-title">Vyberte odletové letiště</h2>
+                        <button type="button" class="dest-modal__close" aria-label="Zavřít">×</button>
+                    </div>
+                    <div class="dest-modal__grid">
+                        <?php foreach ($letiste_podle_statu as $stat => $letiste_mesta): ?>
+                            <div class="dest-state-group" data-stat="<?= htmlspecialchars($stat) ?>">
+                                <div class="dest-state-header">
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" class="cb-stat" value="<?= htmlspecialchars($stat) ?>">
+                                        <span class="checkmark"></span>
+                                        <span class="stat-name"><?= htmlspecialchars($stat) ?></span>
+                                    </label>
+                                    <button type="button" class="dest-expand-btn" aria-label="Rozbalit">v</button>
+                                </div>
+                                <div class="dest-cities">
+                                    <?php foreach ($letiste_mesta as $mesto): ?>
+                                        <label class="checkbox-container city-cb checkbox-label-regular">
+                                            <input type="checkbox" class="cb-mesto" name="letiste[]" value="<?= htmlspecialchars($mesto['iata']) ?>" data-nazev="<?= htmlspecialchars($mesto['mesto']) ?> (<?= htmlspecialchars($mesto['iata']) ?>)">
+                                            <span class="checkmark"></span>
+                                            <?= htmlspecialchars($mesto['mesto']) ?> (<?= htmlspecialchars($mesto['iata']) ?>)
+                                        </label>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="dest-modal__footer">
+                        <button type="button" class="tlacitko tlacitko--primarni" id="letiste-confirm-btn">POTVRDIT A VYHLEDAT</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <label for="hledat-termin">Termín odjezdu</label>
+            <input type="date" id="hledat-termin" name="termin" />
+        </div>
+        <div class="counter-dropdown vyhledavani__polozka-obal">
+            <label>Počet osob</label>
+            <div class="counter-dropdown__toggle" tabindex="0">
+                <span id="pocet-osob-text">2 dospělí</span>
+            </div>
+            <div class="counter-dropdown__menu">
+                <div class="counter-row">
+                    <span>Dospělí</span>
+                    <div class="counter-controls">
+                        <button type="button" class="btn-minus" data-target="dospeli">-</button>
+                        <input type="number" id="hledat-dospeli" name="dospeli" value="2" min="1" max="10" readonly>
+                        <button type="button" class="btn-plus" data-target="dospeli">+</button>
+                    </div>
+                </div>
+                <div class="counter-row">
+                    <span>Děti</span>
+                    <div class="counter-controls">
+                        <button type="button" class="btn-minus" data-target="deti">-</button>
+                        <input type="number" id="hledat-deti" name="deti" value="0" min="0" max="10" readonly>
+                        <button type="button" class="btn-plus" data-target="deti">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <button type="submit" class="tlacitko tlacitko--primarni tlacitko--plna-sirka">Hledat</button>
+        </div>
+    </div>
+</form>
+
+<section class="sekce uvod-popisek-sekce">
+    <p class="uvod-popisek">
+        Venturo je česká cestovní kancelář s více než 15 lety zkušeností. Nabízíme pečlivě vybrané zájezdy,
+        transparentní ceny a osobní přístup od prvního dotazu až po návrat domů.
+    </p>
+</section>

@@ -1,0 +1,385 @@
+<section class="sekce sekce-min-80">
+    <h2 class="sekce__nadpis">Administrace CK Venturo</h2>
+    <p class="sekce__podnadpis">Správa zájezdů, termínů a klientských rezervací.</p>
+
+    <!-- Navigace v záložkách (Tabs) -->
+    <div class="admin-header-tabs">
+        <button onclick="prejdiNaTab('tab-rezervace')" id="btn-tab-rezervace" class="tlacitko-tab aktivni-tab">Rezervace</button>
+        <button onclick="prejdiNaTab('tab-zajezdy')" id="btn-tab-zajezdy" class="tlacitko-tab">Zájezdy</button>
+        <button onclick="prejdiNaTab('tab-terminy')" id="btn-tab-terminy" class="tlacitko-tab">Termíny</button>
+    </div>
+
+    <!-- Panel 1: Rezervace -->
+    <div id="tab-rezervace" class="admin-panel aktivni">
+        <h3 class="admin-form-nadpis">Správa rezervací klientů</h3>
+        
+        <?php if (!empty($success_rezervace)): ?>
+            <div class="alert alert--success">
+                <?= htmlspecialchars($success_rezervace) ?>
+            </div>
+        <?php endif; ?>
+
+        <div class="admin-card admin-card--table">
+            <?php if (!empty($rezervace)): ?>
+                <table class="tabulka">
+                    <thead>
+                        <tr class="tabulka__hlavicka">
+                            <th class="tabulka__sloupec">Klient</th>
+                            <th class="tabulka__sloupec">Zájezd</th>
+                            <th class="tabulka__sloupec">Termín</th>
+                            <th class="tabulka__sloupec tabulka__sloupec--center">Osob</th>
+                            <th class="tabulka__sloupec tabulka__sloupec--right">Celková cena</th>
+                            <th class="tabulka__sloupec tabulka__sloupec--center">Stav</th>
+                            <th class="tabulka__sloupec tabulka__sloupec--center">Akce</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($rezervace as $r): ?>
+                            <?php 
+                                $stavKlass = "badge--vychozi";
+                                if ($r['stav'] === 'potvrzená') {
+                                    $stavKlass = "badge--potvrzena";
+                                } elseif ($r['stav'] === 'čekající') {
+                                    $stavKlass = "badge--cekajici";
+                                } elseif ($r['stav'] === 'zrušená') {
+                                    $stavKlass = "badge--zrusena";
+                                }
+                            ?>
+                            <tr class="tabulka__radek">
+                                <td class="tabulka__bunka">
+                                    <div class="tabulka__klient-jmeno"><?= htmlspecialchars($r['jmeno'] . ' ' . $r['prijmeni']) ?></div>
+                                    <div class="tabulka__klient-email"><?= htmlspecialchars($r['email']) ?></div>
+                                </td>
+                                <td class="tabulka__bunka tabulka__bunka--bold-modra"><?= htmlspecialchars($r['hotel']) ?></td>
+                                <td class="tabulka__bunka--meta">
+                                    <?= date('d.m.Y', strtotime($r['datum_od'])) ?> – <?= date('d.m.Y', strtotime($r['datum_do'])) ?>
+                                </td>
+                                <td class="tabulka__bunka tabulka__bunka--center tabulka__bunka--bold"><?= (int)$r['pocet_osob'] ?></td>
+                                <td class="tabulka__bunka--bold-cena"><?= number_format($r['celkova_cena'], 0, ',', ' ') ?> Kč</td>
+                                <td class="tabulka__bunka tabulka__bunka--center">
+                                    <span class="badge <?= $stavKlass ?>">
+                                        <?= htmlspecialchars($r['stav']) ?>
+                                    </span>
+                                </td>
+                                <td class="tabulka__bunka tabulka__bunka--center">
+                                    <?php if ($r['stav'] === 'čekající'): ?>
+                                        <div class="tabulka__akce-div">
+                                            <form method="POST" action="/administrace">
+                                                <input type="hidden" name="id_rezervace" value="<?= $r['id_rezervace'] ?>">
+                                                <button type="submit" name="akce_rezervace" value="schvalit" class="tlacitko tlacitko--primarni tlacitko--maly">Schválit</button>
+                                            </form>
+                                            <form method="POST" action="/administrace" onsubmit="return confirm('Opravdu chcete zamítnout tuto rezervaci?')">
+                                                <input type="hidden" name="id_rezervace" value="<?= $r['id_rezervace'] ?>">
+                                                <button type="submit" name="akce_rezervace" value="zamitnout" class="tlacitko tlacitko--cerveny tlacitko--maly">Zamítnout</button>
+                                            </form>
+                                        </div>
+                                    <?php else: ?>
+                                        <span class="tabulka__radek-vyrizeno">Vyřízeno</span>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php else: ?>
+                <p class="tabulka-prazdna">V systému nejsou žádné rezervace.</p>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <!-- Panel 2: Zájezdy -->
+    <div id="tab-zajezdy" class="admin-panel">
+        <div class="admin-panel-sloupec">
+            <!-- Formulář pro přidání / úpravu -->
+            <div class="admin-card">
+                <h3 id="form-zajezd-nadpis" class="admin-form-nadpis">Vytvořit nový zájezd</h3>
+                
+                <?php if (!empty($success_zajezd)): ?>
+                    <div class="alert alert--success">
+                        <?= htmlspecialchars($success_zajezd) ?>
+                    </div>
+                <?php endif; ?>
+                
+                <?php if (!empty($chyba_zajezd)): ?>
+                    <div class="alert alert--error">
+                        <?= htmlspecialchars($chyba_zajezd) ?>
+                    </div>
+                <?php endif; ?>
+
+                <form class="formular" method="POST" action="/administrace">
+                    <input type="hidden" name="akce_zajezd" id="form-zajezd-akce" value="pridat">
+                    <input type="hidden" name="id_zajezdu" id="form-zajezd-id" value="">
+                    
+                    <div class="admin-form-grid">
+                        <label>
+                            Název hotelu *
+                            <input type="text" name="hotel" required placeholder="Např. Royal Hotel Barcelona" />
+                        </label>
+                        <label>
+                            Destinace (Město / Stát) *
+                            <select name="id_destinace" required>
+                                <option value="">Vyberte destinaci</option>
+                                <?php foreach ($destinace as $d): ?>
+                                    <option value="<?= htmlspecialchars($d['id_destinace']) ?>"><?= htmlspecialchars($d['nazev_mesta'] . ' (' . $d['stat'] . ')') ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </label>
+                        <label>
+                            Cena (Kč za osobu) *
+                            <input type="number" name="cena" required min="1" placeholder="Např. 14900" />
+                        </label>
+                        <label>
+                            Stravování *
+                            <input type="text" name="strava" required placeholder="Např. All Inclusive, Polopenze, Snídaně" />
+                        </label>
+                    </div>
+                    <label class="form-label-full">
+                        Cesta k fotografii (případně prázdné)
+                        <input type="text" name="obrazky" placeholder="Např. /images/barcelona.jpg" />
+                    </label>
+                    <label class="form-label-full">
+                        Popis zájezdu *
+                        <textarea name="popis" required placeholder="Zadejte detailní informace o ubytování, pláži a okolí..."></textarea>
+                    </label>
+                    
+                    <div class="admin-form-buttons">
+                        <button type="submit" id="btn-zajezd-submit" class="tlacitko tlacitko--primarni tlacitko--velky">Přidat zájezd</button>
+                        <button type="button" id="btn-zajezd-storno" onclick="stornujUpravuZajezdu()" class="tlacitko admin-zrusit-btn skryte">Zrušit úpravy</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Výpis zájezdů -->
+            <div class="admin-card admin-card--table">
+                <h3 class="admin-form-nadpis">Stávající zájezdy</h3>
+                <table class="tabulka">
+                    <thead>
+                        <tr class="tabulka__hlavicka">
+                            <th class="tabulka__sloupec">Název / Destinace</th>
+                            <th class="tabulka__sloupec">Stravování</th>
+                            <th class="tabulka__sloupec tabulka__sloupec--right">Cena</th>
+                            <th class="tabulka__sloupec tabulka__sloupec--center">Akce</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($zajezdy as $z): ?>
+                            <tr class="tabulka__radek">
+                                <td class="tabulka__bunka">
+                                    <div class="tabulka__nazev-bold"><?= htmlspecialchars($z['hotel']) ?></div>
+                                    <div class="tabulka__meta-seda">📍 <?= htmlspecialchars($z['destinace'] . ', ' . $z['stat']) ?></div>
+                                </td>
+                                <td class="tabulka__bunka"><?= htmlspecialchars($z['strava']) ?></td>
+                                <td class="tabulka__bunka--bold-cena"><?= number_format($z['cena'], 0, ',', ' ') ?> Kč</td>
+                                <td class="tabulka__bunka tabulka__bunka--center">
+                                    <div class="tabulka__akce-div">
+                                        <button type="button" onclick='upravZajezd(<?= json_encode($z, JSON_HEX_APOS | JSON_HEX_QUOT) ?>)' class="tlacitko tlacitko--primarni tlacitko--maly">Upravit</button>
+                                        <form method="POST" action="/administrace" onsubmit="return confirm('Opravdu chcete smazat tento zájezd? Smažou se i všechny přidružené termíny a rezervace.')">
+                                            <input type="hidden" name="akce_zajezd" value="smazat">
+                                            <input type="hidden" name="id_zajezdu" value="<?= $z['id_zajezdu'] ?>">
+                                            <button type="submit" class="tlacitko tlacitko--cerveny tlacitko--maly">Smazat</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel 3: Termíny -->
+    <div id="tab-terminy" class="admin-panel">
+        <div class="admin-panel-sloupec">
+            <!-- Formulář pro přidání / úpravu -->
+            <div class="admin-card">
+                <h3 id="form-termin-nadpis" class="admin-form-nadpis">Vypsat nový termín</h3>
+                
+                <?php if (!empty($success_termin)): ?>
+                    <div class="alert alert--success">
+                        <?= htmlspecialchars($success_termin) ?>
+                    </div>
+                <?php endif; ?>
+                
+                <?php if (!empty($chyba_termin)): ?>
+                    <div class="alert alert--error">
+                        <?= htmlspecialchars($chyba_termin) ?>
+                    </div>
+                <?php endif; ?>
+
+                <form class="formular" method="POST" action="/administrace">
+                    <input type="hidden" name="akce_termin" id="form-termin-akce" value="pridat">
+                    <input type="hidden" name="id_terminu" id="form-termin-id" value="">
+                    
+                    <div class="admin-form-grid-4col">
+                        <label>
+                            Zájezd / Hotel *
+                            <select name="id_zajezdu" required>
+                                <option value="">Vyberte zájezd</option>
+                                <?php foreach ($zajezdy as $z): ?>
+                                    <option value="<?= htmlspecialchars($z['id_zajezdu']) ?>"><?= htmlspecialchars($z['hotel']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </label>
+                        <label>
+                            Datum odletu *
+                            <input type="date" name="datum_od" required />
+                        </label>
+                        <label>
+                            Datum návratu *
+                            <input type="date" name="datum_do" required />
+                        </label>
+                        <label>
+                            Kapacita (míst) *
+                            <input type="number" name="kapacita" required min="1" placeholder="Např. 30" />
+                        </label>
+                    </div>
+                    
+                    <div class="admin-form-buttons">
+                        <button type="submit" id="btn-termin-submit" class="tlacitko tlacitko--primarni tlacitko--velky">Uložit termín</button>
+                        <button type="button" id="btn-termin-storno" onclick="stornujUpravuTerminu()" class="tlacitko admin-zrusit-btn skryte">Zrušit úpravy</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Výpis termínů -->
+            <div class="admin-card admin-card--table">
+                <h3 class="admin-form-nadpis">Vypsané termíny</h3>
+                <table class="tabulka">
+                    <thead>
+                        <tr class="tabulka__hlavicka">
+                            <th class="tabulka__sloupec">Zájezd / Hotel</th>
+                            <th class="tabulka__sloupec">Termín</th>
+                            <th class="tabulka__sloupec tabulka__sloupec--center">Kapacita</th>
+                            <th class="tabulka__sloupec tabulka__sloupec--center">Akce</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($terminy as $t): ?>
+                            <tr class="tabulka__radek">
+                                <td class="tabulka__bunka--bold-modra"><?= htmlspecialchars($t['hotel']) ?></td>
+                                <td class="tabulka__bunka">
+                                    📅 <?= date('d.m.Y', strtotime($t['datum_od'])) ?> – <?= date('d.m.Y', strtotime($t['datum_do'])) ?>
+                                </td>
+                                <td class="tabulka__bunka tabulka__bunka--center tabulka__bunka--bold"><?= (int)$t['kapacita'] ?></td>
+                                <td class="tabulka__bunka tabulka__bunka--center">
+                                    <div class="tabulka__akce-div">
+                                        <button type="button" onclick='upravTermin(<?= json_encode($t, JSON_HEX_APOS | JSON_HEX_QUOT) ?>)' class="tlacitko tlacitko--primarni tlacitko--maly">Upravit</button>
+                                        <form method="POST" action="/administrace" onsubmit="return confirm('Opravdu chcete smazat tento termín?')">
+                                            <input type="hidden" name="akce_termin" value="smazat">
+                                            <input type="hidden" name="id_terminu" value="<?= $t['id_terminu'] ?>">
+                                            <button type="submit" class="tlacitko tlacitko--cerveny tlacitko--maly">Smazat</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- JavaScript pro taby a editaci -->
+<script>
+function prejdiNaTab(tabId) {
+    // Skryjeme panely
+    document.querySelectorAll('.admin-panel').forEach(function (panel) {
+        panel.classList.remove('aktivni');
+    });
+
+    // Zobrazíme vybraný
+    const aktivniPanel = document.getElementById(tabId);
+    if (aktivniPanel) {
+        aktivniPanel.classList.add('aktivni');
+    }
+
+    // Třída na tlačítkách
+    document.querySelectorAll('.tlacitko-tab').forEach(function (btn) {
+        btn.classList.remove('aktivni-tab');
+    });
+
+    const aktivniTlacitko = document.getElementById('btn-' + tabId);
+    if (aktivniTlacitko) {
+        aktivniTlacitko.classList.add('aktivni-tab');
+    }
+
+    // Uchování tabu v session pro případ reloadu
+    sessionStorage.setItem('aktivniAdminTab', tabId);
+}
+
+// Úprava zájezdu
+function upravZajezd(z) {
+    document.getElementById('form-zajezd-nadpis').textContent = 'Upravit zájezd: ' + z.hotel;
+    document.getElementById('form-zajezd-akce').value = 'upravit';
+    document.getElementById('form-zajezd-id').value = z.id_zajezdu;
+    
+    // Předvyplnění formuláře
+    const form = document.querySelector('#tab-zajezdy form');
+    form.querySelector('[name="hotel"]').value = z.hotel;
+    form.querySelector('[name="id_destinace"]').value = z.id_destinace;
+    form.querySelector('[name="cena"]').value = z.cena;
+    form.querySelector('[name="strava"]').value = z.strava;
+    form.querySelector('[name="obrazky"]').value = z.obrazky;
+    form.querySelector('[name="popis"]').value = z.popis;
+    
+    document.getElementById('btn-zajezd-submit').textContent = 'Uložit změny';
+    document.getElementById('btn-zajezd-storno').classList.remove('skryte');
+    
+    // Plynulý posun k formuláři
+    form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function stornujUpravuZajezdu() {
+    document.getElementById('form-zajezd-nadpis').textContent = 'Vytvořit nový zájezd';
+    document.getElementById('form-zajezd-akce').value = 'pridat';
+    document.getElementById('form-zajezd-id').value = '';
+    
+    const form = document.querySelector('#tab-zajezdy form');
+    form.reset();
+    
+    document.getElementById('btn-zajezd-submit').textContent = 'Přidat zájezd';
+    document.getElementById('btn-zajezd-storno').classList.add('skryte');
+}
+
+// Úprava termínu
+function upravTermin(t) {
+    document.getElementById('form-termin-nadpis').textContent = 'Upravit termín';
+    document.getElementById('form-termin-akce').value = 'upravit';
+    document.getElementById('form-termin-id').value = t.id_terminu;
+    
+    // Předvyplnění formuláře
+    const form = document.querySelector('#tab-terminy form');
+    form.querySelector('[name="id_zajezdu"]').value = t.id_zajezdu;
+    form.querySelector('[name="datum_od"]').value = t.datum_od;
+    form.querySelector('[name="datum_do"]').value = t.datum_do;
+    form.querySelector('[name="kapacita"]').value = t.kapacita;
+    
+    document.getElementById('btn-termin-submit').textContent = 'Uložit změny';
+    document.getElementById('btn-termin-storno').classList.remove('skryte');
+    
+    // Plynulý posun k formuláři
+    form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function stornujUpravuTerminu() {
+    document.getElementById('form-termin-nadpis').textContent = 'Vypsat nový termín';
+    document.getElementById('form-termin-akce').value = 'pridat';
+    document.getElementById('form-termin-id').value = '';
+    
+    const form = document.querySelector('#tab-terminy form');
+    form.reset();
+    
+    document.getElementById('btn-termin-submit').textContent = 'Uložit termín';
+    document.getElementById('btn-termin-storno').classList.add('skryte');
+}
+
+// Obnovení aktivního tabu z paměti po načtení
+document.addEventListener("DOMContentLoaded", function () {
+    const ulozenyTab = sessionStorage.getItem('aktivniAdminTab');
+    if (ulozenyTab) {
+        prejdiNaTab(ulozenyTab);
+    }
+});
+</script>

@@ -1,0 +1,1603 @@
+:root {
+    --barva-modra: #093c5d;
+    --barva-modra-svetla: #3b7597;
+    --barva-oranzova: #6fd1d7;
+    --barva-oranzova-tmava: #5df8d8;
+    --barva-pozadi: #faffff;
+    --barva-karta-pozadi: #ffffff;
+    --barva-text: #093c5d;
+    --barva-seda: #3b7597;
+    --stin: 0 4px 24px rgba(9, 60, 93, 0.15);
+    --zaobleni: 12px;
+    --barva-border: #cbd5e1;
+    --barva-tab-pozadi: #f8fafc;
+    --barva-input-pozadi: #ffffff;
+    --barva-nav-pozadi: #f8fafc;
+    --barva-nav-border: #e2e8f0;
+    --barva-modal-overlay: rgba(9, 60, 93, 0.6);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    color: var(--barva-text);
+    background: var(--barva-pozadi);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
+
+@font-face {
+    font-family: 'Beach Resort';
+    src: url('/fonts/beach_resort.ttf') format('truetype'),
+         url('/fonts/BeachResort.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.font-beach {
+    font-family: 'Beach Resort', cursive;
+    font-weight: normal;
+}
+
+a {
+    color: var(--barva-modra-svetla);
+}
+
+/* Hlavička */
+.hlavicka {
+    background: var(--barva-karta-pozadi);
+    box-shadow: var(--stin);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--barva-nav-border);
+}
+
+.hlavicka__top {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.hlavicka__bottom {
+    background: var(--barva-nav-pozadi);
+    border-top: 1px solid var(--barva-nav-border);
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--barva-modra);
+    text-decoration: none;
+}
+
+.hlavicka__uzivatel {
+    font-size: 0.95rem;
+    color: var(--barva-seda);
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+}
+
+.hlavicka__uzivatel a {
+    color: var(--barva-modra);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.hlavicka__uzivatel a:hover {
+    color: var(--barva-oranzova);
+}
+
+.navigace {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.navigace ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem 2rem;
+}
+
+.navigace a {
+    text-decoration: none;
+    color: var(--barva-text);
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.75rem 0;
+    display: block;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.navigace a:hover {
+    color: var(--barva-modra-svetla);
+    border-bottom-color: var(--barva-oranzova);
+}
+
+/* Sekce obecně */
+.sekce {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem;
+}
+
+.sekce--seda {
+    background: #f0fcfc;
+}
+
+.sekce__nadpis {
+    text-align: center;
+    margin: 0 0 0.5rem;
+    font-size: 2rem;
+    color: var(--barva-modra);
+}
+
+.sekce__podnadpis {
+    text-align: center;
+    color: var(--barva-seda);
+    margin: 0 0 2.5rem;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Hero */
+.hero {
+    position: relative;
+    min-height: 520px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    overflow: hidden;
+}
+
+.hero__video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.hero__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(9, 60, 93, 0.4), rgba(59, 117, 151, 0.2));
+    z-index: 2;
+    pointer-events: none;
+}
+
+.hero__obsah {
+    position: relative;
+    z-index: 3;
+    max-width: 720px;
+    padding: 2rem 1.5rem;
+}
+
+.hero h1 {
+    margin: 0 0 1rem;
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.hero p {
+    font-size: 1.15rem;
+    margin: 0 0 1.75rem;
+    opacity: 0.95;
+}
+
+.tlacitko {
+    display: inline-block;
+    padding: 0.75rem 1.75rem;
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: transform 0.15s, background 0.2s;
+}
+
+.tlacitko:hover {
+    transform: translateY(-2px);
+}
+
+.tlacitko--primarni {
+    background: var(--barva-oranzova);
+    color: var(--barva-modra);
+}
+
+.tlacitko--primarni:hover {
+    background: var(--barva-oranzova-tmava);
+    color: var(--barva-modra);
+}
+
+.tlacitko--sekundarni {
+    background: var(--barva-karta-pozadi);
+    color: var(--barva-modra);
+}
+
+.tlacitko--outline {
+    background: transparent;
+    border: 2px solid #fff;
+    color: #fff;
+}
+
+/* Vyhledávání */
+.vyhledavani {
+    background: var(--barva-karta-pozadi);
+    border-radius: var(--zaobleni);
+    box-shadow: var(--stin);
+    padding: 1.5rem;
+    margin-top: -3rem;
+    position: relative;
+    z-index: 10;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid var(--barva-border);
+}
+
+.vyhledavani__mrizka {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    align-items: end;
+}
+
+@media (min-width: 992px) {
+    .vyhledavani__mrizka {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+.vyhledavani label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--barva-seda);
+    margin-bottom: 0.35rem;
+}
+
+.vyhledavani input,
+.vyhledavani select {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--barva-border);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--barva-input-pozadi);
+    color: var(--barva-text);
+}
+
+/* Counter Dropdown */
+.counter-dropdown__toggle {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--barva-border);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--barva-input-pozadi);
+    color: var(--barva-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 44px; /* sjednoceni vysky s inputy */
+}
+.counter-dropdown__toggle::after {
+    content: "▼";
+    font-size: 0.7em;
+    color: var(--barva-seda);
+}
+.counter-dropdown__menu {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    min-width: 220px;
+    background: var(--barva-karta-pozadi);
+    border: 1px solid var(--barva-border);
+    border-radius: 8px;
+    box-shadow: var(--stin);
+    padding: 1rem;
+    z-index: 20;
+    display: none;
+    color: var(--barva-text);
+}
+.counter-dropdown.open .counter-dropdown__menu {
+    display: block;
+}
+.counter-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+.counter-row:last-child {
+    margin-bottom: 0;
+}
+.counter-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.counter-controls button {
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--barva-border);
+    background: var(--barva-pozadi);
+    color: var(--barva-text);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 0;
+    transition: background 0.2s;
+}
+.counter-controls button:hover {
+    background: #e2e8f0;
+}
+.counter-controls input {
+    width: 32px !important;
+    text-align: center;
+    border: none !important;
+    padding: 0 !important;
+    font-size: 1rem;
+    pointer-events: none;
+    background: transparent !important;
+}
+.counter-controls input[type=number]::-webkit-inner-spin-button, 
+.counter-controls input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+}
+
+/* Destination Picker Modal */
+.dest-trigger {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--barva-border);
+    border-radius: var(--zaobleni);
+    font-size: 1rem;
+    background: var(--barva-input-pozadi);
+    color: var(--barva-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 44px;
+}
+.dest-trigger::after {
+    content: "▼";
+    font-size: 0.7em;
+    color: var(--barva-seda);
+}
+
+.dest-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--barva-modal-overlay);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+.dest-modal.open {
+    display: flex;
+}
+.dest-modal__content {
+    background: var(--barva-karta-pozadi);
+    border: 1px solid var(--barva-border);
+    width: 90%;
+    max-width: 900px;
+    max-height: 90vh;
+    border-radius: var(--zaobleni);
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--stin);
+    overflow: hidden;
+}
+.dest-modal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--barva-border);
+}
+.dest-modal__close {
+    background: transparent;
+    border: none;
+    font-size: 2rem;
+    color: var(--barva-seda);
+    cursor: pointer;
+    line-height: 1;
+}
+.dest-modal__search {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--barva-border);
+}
+.dest-modal__search input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--barva-border);
+    border-radius: var(--zaobleni);
+    font-size: 1rem;
+    background: var(--barva-input-pozadi);
+    color: var(--barva-text);
+}
+.dest-modal__grid {
+    padding: 1.5rem;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    align-items: start;
+}
+.dest-state-group {
+    display: flex;
+    flex-direction: column;
+}
+.dest-state-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+.dest-expand-btn {
+    background: transparent;
+    border: none;
+    font-size: 1rem;
+    color: var(--barva-seda);
+    cursor: pointer;
+    padding: 0 0.5rem;
+}
+.dest-cities {
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-left: 1.5rem;
+    margin-top: 0.5rem;
+}
+.dest-cities.open {
+    display: flex;
+}
+.dest-modal__footer {
+    padding: 1.5rem;
+    border-top: 1px solid var(--barva-border);
+    text-align: center;
+}
+
+/* Custom Checkbox */
+.checkbox-container {
+    display: block;
+    position: relative;
+    padding-left: 28px;
+    margin-bottom: 0;
+    cursor: pointer;
+    font-size: 0.95rem;
+    user-select: none;
+    color: var(--barva-text);
+}
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+.checkmark {
+    position: absolute;
+    top: 2px;
+    left: 0;
+    height: 18px;
+    width: 18px;
+    background-color: var(--barva-input-pozadi);
+    border: 1px solid var(--barva-border);
+    border-radius: 4px;
+}
+.checkbox-container:hover input ~ .checkmark {
+    border-color: var(--barva-modra-svetla);
+}
+.checkbox-container input:checked ~ .checkmark {
+    background-color: var(--barva-oranzova);
+    border-color: var(--barva-oranzova);
+}
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+.checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+.checkbox-container .checkmark:after {
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid var(--barva-modra);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+.checkbox-container input:indeterminate ~ .checkmark {
+    background-color: var(--barva-oranzova-tmava);
+    border-color: var(--barva-oranzova-tmava);
+}
+.checkbox-container input:indeterminate ~ .checkmark:after {
+    display: block;
+    left: 4px;
+    top: 7px;
+    width: 8px;
+    height: 0;
+    border: solid var(--barva-modra);
+    border-width: 0 0 2px 0;
+    transform: none;
+}
+
+/* Filtry zájezdů */
+.filtry {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: var(--barva-karta-pozadi);
+    border-radius: var(--zaobleni);
+    box-shadow: var(--stin);
+    border: 1px solid var(--barva-border);
+}
+
+.filtry label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--barva-seda);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.filtry select {
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    border: 1px solid var(--barva-border);
+    min-width: 160px;
+    background: var(--barva-input-pozadi);
+    color: var(--barva-text);
+}
+
+/* Karty zájezdů */
+.karty {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.karta {
+    background: var(--barva-karta-pozadi);
+    border-radius: var(--zaobleni);
+    overflow: hidden;
+    box-shadow: var(--stin);
+    transition: transform 0.2s;
+    border: 1px solid var(--barva-border);
+}
+
+.karta:hover {
+    transform: translateY(-4px);
+}
+
+.karta__obrazek {
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+}
+
+.karta__telo {
+    padding: 1.25rem;
+}
+
+.karta h3 {
+    margin: 0 0 0.5rem;
+    color: var(--barva-modra);
+}
+
+.karta__cena {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--barva-oranzova);
+    margin: 0.5rem 0;
+}
+
+.karta__meta {
+    font-size: 0.9rem;
+    color: var(--barva-seda);
+    margin-bottom: 0.75rem;
+}
+
+.karta__tagy {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+}
+
+.tag {
+    font-size: 0.75rem;
+    background: var(--barva-oranzova-tmava);
+    color: var(--barva-modra);
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+}
+
+/* Detail zájezdu (modální panel v sekci) */
+.detail-zajezdu {
+    display: none;
+    background: var(--barva-karta-pozadi);
+    border-radius: var(--zaobleni);
+    box-shadow: var(--stin);
+    padding: 2rem;
+    margin-top: 2rem;
+    border-left: 4px solid var(--barva-oranzova);
+    border: 1px solid var(--barva-border);
+    border-left: 4px solid var(--barva-oranzova);
+}
+
+.detail-zajezdu--viditelny {
+    display: block;
+}
+
+.detail-zajezdu__galerie {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem;
+    margin: 1rem 0;
+}
+
+.detail-zajezdu__galerie div {
+    height: 100px;
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+}
+
+.detail-zajezdu ul {
+    padding-left: 1.25rem;
+}
+
+/* Destinace */
+.destinace-mrizka {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+}
+
+.destinace {
+    background: var(--barva-karta-pozadi);
+    border-radius: var(--zaobleni);
+    padding: 1.5rem;
+    box-shadow: var(--stin);
+    border: 1px solid var(--barva-border);
+}
+
+.destinace h3 {
+    margin: 0 0 0.5rem;
+    color: var(--barva-modra);
+}
+
+/* O nás */
+.o-nas-mrizka {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+}
+
+.o-nas-box {
+    background: var(--barva-karta-pozadi);
+    padding: 1.5rem;
+    border-radius: var(--zaobleni);
+    box-shadow: var(--stin);
+    text-align: center;
+    border: 1px solid var(--barva-border);
+}
+
+.o-nas-box__ikona {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Kontakt */
+.kontakt-mrizka {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.kontakt-info p {
+    margin: 0.5rem 0;
+}
+
+.formular label {
+    display: block;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.formular input,
+.formular textarea,
+.formular select {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    margin-top: 0.35rem;
+    border: 1px solid var(--barva-border);
+    border-radius: 8px;
+    font: inherit;
+    background: var(--barva-input-pozadi);
+    color: var(--barva-text);
+}
+.formular input[readonly] {
+    background: var(--barva-tab-pozadi);
+    color: var(--barva-seda);
+    cursor: not-allowed;
+}
+
+.formular textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Přihlášení / registrace */
+.auth-mrizka {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.auth-box {
+    background: var(--barva-karta-pozadi);
+    padding: 2rem;
+    border-radius: var(--zaobleni);
+    box-shadow: var(--stin);
+    border: 1px solid var(--barva-border);
+}
+
+.auth-box h3 {
+    margin-top: 0;
+    color: var(--barva-modra);
+}
+
+/* Účet */
+.ucet-panel {
+    background: var(--barva-karta-pozadi);
+    border-radius: var(--zaobleni);
+    box-shadow: var(--stin);
+    padding: 2rem;
+    border: 1px solid var(--barva-border);
+}
+
+.ucet-panel table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.ucet-panel th,
+.ucet-panel td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--barva-border);
+}
+
+.ucet-panel th {
+    background: var(--barva-tab-pozadi);
+    color: var(--barva-modra);
+}
+
+.upozorneni {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #9a3412;
+    padding: 1rem 1.25rem;
+    border-radius: var(--zaobleni);
+    margin-bottom: 1rem;
+}
+
+.upozorneni--info {
+    background: #e0f2fe;
+    border-color: #7dd3fc;
+    color: var(--barva-modra);
+}
+
+.pata {
+    background: var(--barva-modra);
+    color: var(--barva-oranzova-tmava);
+    text-align: center;
+    padding: 2rem 1.5rem;
+    font-size: 0.9rem;
+}
+
+.pata a {
+    color: var(--barva-oranzova);
+}
+
+.skryte {
+    display: none !important;
+}
+
+@media (max-width: 640px) {
+    .sekce {
+        padding: 2.5rem 1rem;
+    }
+
+    .hero {
+        min-height: 400px;
+    }
+}
+
+/* Detail zájezdu stránka */
+.zpet-odkaz:hover {
+    color: var(--barva-oranzova) !important;
+}
+
+.zajezd-detail {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    margin-top: 1.5rem;
+}
+
+.zajezd-detail__hlavni {
+    display: flex;
+    flex-direction: column;
+}
+
+.zajezd-detail__obrazek-obal {
+    width: 100%;
+    height: 480px;
+    overflow: hidden;
+    border-radius: var(--zaobleni);
+    box-shadow: var(--stin);
+    margin-bottom: 2rem;
+}
+
+.zajezd-detail__obrazek {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.zajezd-detail__obrazek-obal:hover .zajezd-detail__obrazek {
+    transform: scale(1.03);
+}
+
+.zajezd-detail__nazev {
+    font-size: 2.5rem;
+    margin: 0 0 0.5rem;
+    color: var(--barva-modra);
+}
+
+.zajezd-detail__lokace {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--barva-seda);
+    margin: 0 0 1.25rem;
+}
+
+.zajezd-detail__tagy {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.zajezd-detail__popis p {
+    color: var(--barva-text);
+    font-size: 1.05rem;
+    line-height: 1.7;
+}
+
+.zajezd-detail__karta {
+    background: var(--barva-karta-pozadi);
+    border-radius: var(--zaobleni);
+    box-shadow: var(--stin);
+    padding: 2rem;
+    border: 1px solid var(--barva-border);
+}
+
+.zajezd-detail__cena-sekce {
+    background: #f0fcfc;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--barva-oranzova);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.zajezd-detail__cena-popisek {
+    font-size: 0.85rem;
+    color: var(--barva-seda);
+    text-transform: uppercase;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.25rem;
+    letter-spacing: 0.05em;
+}
+
+.zajezd-detail__cena {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--barva-modra);
+    line-height: 1.1;
+    margin-bottom: 0.25rem;
+}
+
+.zajezd-detail__cena-osoba {
+    font-size: 0.9rem;
+    color: var(--barva-seda);
+    font-weight: 500;
+}
+
+.termin-karta {
+    display: block;
+    padding: 1rem;
+    border: 2px solid var(--barva-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background: var(--barva-karta-pozadi);
+    position: relative;
+    color: var(--barva-text);
+}
+
+.termin-karta:hover {
+    border-color: var(--barva-modra-svetla);
+    background: var(--barva-tab-pozadi);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(9, 60, 93, 0.05);
+}
+
+.termin-karta.aktivni {
+    border-color: var(--barva-oranzova);
+    background: rgba(111, 209, 215, 0.1);
+    box-shadow: 0 4px 12px rgba(111, 209, 215, 0.15);
+}
+
+.termin-radio {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.termin-datum {
+    font-weight: 700;
+    color: var(--barva-modra);
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.termin-kapacita {
+    font-size: 0.85rem;
+    color: var(--barva-seda);
+}
+
+@media (min-width: 992px) {
+    .zajezd-detail {
+        grid-template-columns: 7fr 5fr;
+        gap: 3rem;
+    }
+    
+    .zajezd-detail__sidebar {
+        position: sticky;
+        top: 120px;
+    }
+}
+
+@media (max-width: 768px) {
+    .zajezd-detail__obrazek-obal {
+        height: 280px;
+    }
+    
+    .zajezd-detail__nazev {
+        font-size: 2rem;
+    }
+}
+
+/* --- EXTRACTED FROM TEMPLATES --- */
+
+/* Globální a pomocné třídy */
+.sekce-min-70 {
+    min-height: 70vh;
+}
+.sekce-min-60 {
+    min-height: 60vh;
+}
+.alert {
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+.alert--success {
+    background: #e6fcf5;
+    color: #0ca678;
+    border-left: 4px solid #0ca678;
+}
+.alert--error {
+    background: #fff5f5;
+    color: #fa5252;
+    border-left: 4px solid #fa5252;
+}
+.alert--large {
+    padding: 1.5rem;
+    border-radius: 8px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+.tlacitko--blok {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+}
+.tlacitko--plna-sirka {
+    width: 100%;
+}
+.tlacitko--logout {
+    border: 2px solid #ef4444 !important;
+    color: #ef4444 !important;
+    background: transparent;
+}
+.tlacitko--logout:hover {
+    background: rgba(239, 68, 68, 0.1) !important;
+}
+
+/* Hlavička a navigace */
+.hlavicka__logo-img {
+    height: 65px;
+    width: auto;
+    display: block;
+}
+.hlavicka__admin-odkaz {
+    color: var(--barva-oranzova) !important;
+    font-weight: 700;
+}
+.hlavicka__uzivatel-jmeno {
+    font-weight: 700;
+    color: var(--barva-modra) !important;
+}
+
+/* Úvodní stránka */
+.rychle-vyhledavani-sekce {
+    padding-top: 0;
+    padding-bottom: 2rem;
+}
+.rychle-vyhledavani-nadpis {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+.vyhledavani__polozka-obal {
+    position: relative;
+}
+.vyhledavani__modal-title {
+    font-size: 1.25rem;
+    margin: 0;
+    color: var(--barva-modra);
+}
+.checkbox-label-regular {
+    font-weight: 400;
+}
+.uvod-popisek-sekce {
+    padding-top: 1rem;
+}
+.uvod-popisek {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+}
+
+/* Zájezdy */
+.karta__popis {
+    font-size: 0.9rem;
+    color: var(--barva-seda);
+    line-height: 1.4;
+    margin-bottom: 1rem;
+}
+.karty-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--barva-seda);
+    padding: 3rem;
+}
+
+/* Destinace */
+.destinace-card {
+    transition: transform 0.2s;
+}
+.destinace-card:hover {
+    transform: translateY(-2px);
+}
+.destinace-card__nadpis {
+    border-bottom: 2px solid var(--barva-oranzova);
+    padding-bottom: 0.5rem;
+    color: var(--barva-modra);
+    margin-top: 0;
+}
+.destinace-card__stat-odkaz {
+    text-decoration: none;
+    color: var(--barva-modra);
+    transition: color 0.2s;
+}
+.destinace-card__stat-odkaz:hover {
+    color: var(--barva-oranzova);
+}
+.destinace-card__mesta-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+.destinace-card__mesto-polozka {
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.destinace-card__mesto-odkaz {
+    text-decoration: none;
+    color: var(--barva-text);
+    transition: color 0.2s;
+    font-size: 0.95rem;
+}
+.destinace-card__mesto-odkaz:hover {
+    color: var(--barva-oranzova);
+}
+
+/* Detail zájezdu */
+.zpet-obal {
+    margin-bottom: 2rem;
+}
+.zpet-odkaz {
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--barva-modra-svetla);
+    transition: color 0.2s;
+}
+.zajezd-detail__tag {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.8rem;
+}
+.zajezd-detail__tag-air {
+    background: #eefcfc;
+    border: 1px solid var(--barva-oranzova);
+    color: var(--barva-modra);
+}
+.zajezd-detail__tag-guide {
+    background: #fffbeb;
+    border: 1px solid #f59e0b;
+    color: #b45309;
+}
+.zajezd-detail__podnadpis {
+    color: var(--barva-modra);
+    border-bottom: 2px solid var(--barva-oranzova);
+    padding-bottom: 0.5rem;
+    margin-top: 2rem;
+}
+.zajezd-detail__popis-text {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--barva-text);
+    margin-top: 1rem;
+}
+.zajezd-detail__vybaveni-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+.zajezd-detail__vybaveni-polozka {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+}
+.zajezd-detail__formular-obal {
+    margin-top: 1.5rem;
+}
+.zajezd-detail__formular-nadpis {
+    color: var(--barva-modra);
+    font-size: 1.15rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--barva-border);
+    padding-bottom: 0.5rem;
+}
+.zajezd-detail__formular-polozka {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+.zajezd-detail__formular-label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--barva-text);
+    margin-bottom: 0.5rem;
+}
+.zajezd-detail__formular-select {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--barva-border);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    background: var(--barva-input-pozadi);
+    color: var(--barva-text);
+}
+.zajezd-detail__rezervovat-tlacitko {
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    text-align: center;
+    border-radius: var(--zaobleni);
+    font-size: 1.1rem;
+}
+.zajezd-detail__terminy-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* Kontakt */
+.kontakt-doplneni {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #f0fcfc;
+    border-radius: 8px;
+}
+.kontakt-doplneni__nadpis {
+    margin: 0 0 0.5rem 0;
+    color: var(--barva-modra);
+}
+.kontakt-doplneni__popis {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--barva-seda);
+}
+.kontakt-rezervace-info {
+    background: #eef2f6;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    border-left: 3px solid var(--barva-modra-svetla);
+}
+
+/* Nastavení účtu */
+.ucet-card__nadpis {
+    border-bottom: 2px solid var(--barva-oranzova);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+.ucet-akce {
+    text-align: center;
+    margin-top: 3rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* Moje rezervace */
+.rezervace-sekce {
+    min-height: 60vh;
+}
+.rezervace-zpet {
+    margin-bottom: 2rem;
+}
+.rezervace-panel-obal {
+    background: var(--barva-karta-pozadi);
+    border-radius: var(--zaobleni);
+    box-shadow: var(--stin);
+    padding: 2rem;
+    overflow-x: auto;
+}
+.tabulka {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+.tabulka__hlavicka {
+    background: var(--barva-tab-pozadi);
+    border-bottom: 2px solid var(--barva-border);
+}
+.tabulka__sloupec {
+    padding: 1rem;
+    color: var(--barva-modra);
+    font-weight: 700;
+}
+.tabulka__radek {
+    border-bottom: 1px solid var(--barva-border);
+    transition: background 0.15s;
+}
+.tabulka__radek:hover {
+    background: var(--barva-tab-pozadi);
+}
+.tabulka__bunka {
+    padding: 1rem;
+}
+.tabulka__bunka--bold-modra {
+    padding: 1rem;
+    font-weight: 600;
+    color: var(--barva-modra);
+}
+.tabulka__bunka--bold-cena {
+    padding: 1rem;
+    text-align: right;
+    font-weight: 700;
+    color: var(--barva-modra);
+}
+.tabulka__bunka--meta {
+    padding: 1rem;
+    font-size: 0.85rem;
+    color: var(--barva-seda);
+}
+.badge {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.badge--vychozi {
+    background: #f1f5f9;
+    color: #475569;
+}
+.badge--potvrzena {
+    background: #e6fcf5;
+    color: #0ca678;
+    border: 1px solid #c3fae8;
+}
+.badge--cekajici {
+    background: #fff9db;
+    color: #f59f00;
+    border: 1px solid #fff3bf;
+}
+.badge--zrusena {
+    background: #fff5f5;
+    color: #fa5252;
+    border: 1px solid #ffe3e3;
+}
+.empty-state {
+    text-align: center;
+    padding: 3rem 1.5rem;
+}
+.empty-state__ikona {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+.empty-state__nadpis {
+    color: var(--barva-modra);
+    margin-top: 0;
+}
+.empty-state__popis {
+    color: var(--barva-seda);
+    max-width: 400px;
+    margin: 0 auto 2rem;
+}
+
+/* Administrace */
+.tlacitko-tab {
+    background: transparent;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--barva-seda);
+    padding: 0.5rem 1.5rem;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+.tlacitko-tab:hover {
+    color: var(--barva-modra);
+    background: var(--barva-tab-pozadi);
+}
+.tlacitko-tab.aktivni-tab {
+    color: var(--barva-modra);
+    background: var(--barva-oranzova);
+}
+.admin-panel {
+    display: none;
+    animation: fadeIn 0.35s ease-in-out;
+}
+.admin-panel.aktivni {
+    display: block;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.admin-header-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    border-bottom: 2px solid var(--barva-border);
+    padding-bottom: 1rem;
+}
+
+.admin-form-nadpis {
+    color: var(--barva-modra);
+    border-bottom: 2px solid var(--barva-oranzova);
+    padding-bottom: 0.5rem;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+.admin-zrusit-btn {
+    background: #64748b;
+    color: #fff;
+    padding: 0.8rem 2rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 999px;
+    font-weight: 600;
+    margin-left: 0.5rem;
+    transition: transform 0.15s;
+}
+.admin-zrusit-btn:hover {
+    transform: translateY(-2px);
+}
+
+.tabulka__klient-jmeno {
+    font-weight: 600;
+    color: var(--barva-modra);
+}
+.tabulka__klient-email {
+    font-size: 0.8rem;
+    color: var(--barva-seda);
+}
+.tabulka__radek-vyrizeno {
+    color: var(--barva-seda);
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+.tabulka__bunka--center {
+    padding: 1rem;
+    text-align: center;
+}
+.tabulka__bunka--bold {
+    font-weight: 600;
+}
+
+.tlacitko--maly {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.85rem;
+    border-radius: 4px;
+}
+.tlacitko--cerveny {
+    background: #ef4444 !important;
+    color: #fff !important;
+    border: none;
+    cursor: pointer;
+}
+.tlacitko--cerveny:hover {
+    background: #dc2626 !important;
+}
+.admin-panel-sloupec {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.admin-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+.admin-form-buttons {
+    display: flex;
+    align-items: center;
+    margin-top: 1.5rem;
+}
+.tabulka__akce-div {
+    display: flex;
+    gap: 0.25rem;
+    justify-content: center;
+}
+
+.sekce-min-80 {
+    min-height: 80vh;
+}
+.admin-card {
+    background: var(--barva-karta-pozadi);
+    border-radius: var(--zaobleni);
+    box-shadow: var(--stin);
+    padding: 2rem;
+    border: 1px solid var(--barva-border);
+}
+.admin-card--table {
+    padding: 1.5rem;
+    overflow-x: auto;
+}
+.tabulka__sloupec--center {
+    text-align: center;
+}
+.tabulka__sloupec--right {
+    text-align: right;
+}
+.tabulka__bunka--right {
+    text-align: right;
+}
+.tabulka__nazev-bold {
+    font-weight: 600;
+    color: var(--barva-modra);
+}
+.tabulka__meta-seda {
+    font-size: 0.85rem;
+    color: var(--barva-seda);
+}
+.tabulka-prazdna {
+    text-align: center;
+    color: var(--barva-seda);
+    font-style: italic;
+    padding: 2rem 0;
+}
+.form-label-full {
+    margin-top: 1rem;
+    display: block;
+}
+.tlacitko--velky {
+    padding: 0.8rem 2rem;
+}
+.admin-form-grid-4col {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
