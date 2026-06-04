@@ -35,6 +35,17 @@ class UvodKontroler extends Kontroler
             $this->data['rezervace'] = array();
         }
 
+        // Nejnovější zájezdy (10 ks)
+        $zajezdyModel = new Zajezdy();
+        $nejnovejsiZajezdyFlat = $zajezdyModel->vratNejnovejsiZajezdy(10);
+        
+        $nejnovejsiZajezdy = [];
+        foreach ($nejnovejsiZajezdyFlat as $z) {
+            $z['terminy'] = $zajezdyModel->vratTerminyZajezdu($z['id_zajezdu']);
+            $nejnovejsiZajezdy[] = $z;
+        }
+        $this->data['nejnovejsi_zajezdy'] = $nejnovejsiZajezdy;
+
         $this->pohled = 'uvod';
     }
 }
