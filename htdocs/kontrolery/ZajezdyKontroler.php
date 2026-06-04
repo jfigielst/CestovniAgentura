@@ -22,9 +22,18 @@ class ZajezdyKontroler extends Kontroler
 
         $this->data['zajezdy'] = $zajezdy;
 
-        // Také načteme destinace pro filtr
+        // Také načteme destinace pro filtr a seskupíme je
         $uvodModel = new Uvod();
-        $this->data['destinace'] = $uvodModel->vratDestinace();
+        $destinaceFlat = $uvodModel->vratDestinace();
+        $destinacePodleStatu = array();
+        foreach ($destinaceFlat as $d) {
+            $stat = $d['stat'] ? $d['stat'] : 'Ostatní';
+            if (!isset($destinacePodleStatu[$stat])) {
+                $destinacePodleStatu[$stat] = array();
+            }
+            $destinacePodleStatu[$stat][] = $d;
+        }
+        $this->data['destinace_podle_statu'] = $destinacePodleStatu;
 
         $this->pohled = 'zajezdy';
     }
