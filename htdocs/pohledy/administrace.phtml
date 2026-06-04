@@ -115,14 +115,20 @@
                             Název hotelu *
                             <input type="text" name="hotel" required placeholder="Např. Royal Hotel Barcelona" />
                         </label>
-                        <label>
+                        <label style="position: relative;">
                             Destinace (Město / Stát) *
-                            <select name="id_destinace" required>
-                                <option value="">Vyberte destinaci</option>
-                                <?php foreach ($destinace as $d): ?>
-                                    <option value="<?= htmlspecialchars($d['id_destinace']) ?>"><?= htmlspecialchars($d['nazev_mesta'] . ' (' . $d['stat'] . ')') ?></option>
-                                <?php endforeach; ?>
-                            </select>
+                            <?php 
+                            $prefix = 'admin-dest';
+                            $nadpis = 'Vyberte destinaci pro zájezd';
+                            $placeholder = 'Hledat destinaci...';
+                            $data = $destinace_podle_statu;
+                            $isMulti = false; // Administrace vyžaduje POUZE JEDNU destinaci
+                            $inputName = 'id_destinace'; 
+                            $defaultText = 'Vyberte destinaci';
+                            $hodnotaId = 'id_destinace';
+                            $hodnotaNazev = 'nazev_mesta';
+                            include 'komponenty/vyber_destinace.phtml'; 
+                            ?>
                         </label>
                         <label>
                             Cena (Kč za osobu) *
@@ -212,14 +218,21 @@
                     <input type="hidden" name="id_terminu" id="form-termin-id" value="">
                     
                     <div class="admin-form-grid-4col">
-                        <label>
+                        <label style="position: relative;">
                             Zájezd / Hotel *
-                            <select name="id_zajezdu" required>
-                                <option value="">Vyberte zájezd</option>
-                                <?php foreach ($zajezdy as $z): ?>
-                                    <option value="<?= htmlspecialchars($z['id_zajezdu']) ?>"><?= htmlspecialchars($z['hotel']) ?></option>
-                                <?php endforeach; ?>
-                            </select>
+                            <?php 
+                            $prefix = 'admin-termin-zajezd';
+                            $nadpis = 'Vyberte zájezd';
+                            $zajezdyData = [];
+                            foreach ($zajezdy as $z) {
+                                $zajezdyData[$z['id_zajezdu']] = $z['hotel'];
+                            }
+                            $data = $zajezdyData;
+                            $isMulti = false;
+                            $inputName = 'id_zajezdu';
+                            $defaultText = 'Vyberte zájezd';
+                            include 'komponenty/vyber_obecny.phtml'; 
+                            ?>
                         </label>
                         <label>
                             Datum odletu *
@@ -318,7 +331,18 @@ function upravZajezd(z) {
     // Předvyplnění formuláře
     const form = document.querySelector('#tab-zajezdy form');
     form.querySelector('[name="hotel"]').value = z.hotel;
-    form.querySelector('[name="id_destinace"]').value = z.id_destinace;
+    
+    // Předvyplnění pro naši novou modál komponentu (radio button)
+    const destRadio = form.querySelector(`[name="id_destinace"][value="${z.id_destinace}"]`);
+    if (destRadio) {
+        destRadio.checked = true;
+        const triggerText = document.getElementById('admin-dest-trigger-text');
+        if (triggerText) {
+            triggerText.textContent = destRadio.getAttribute('data-nazev');
+        }
+    }
+    
+    
     form.querySelector('[name="cena"]').value = z.cena;
     form.querySelector('[name="strava"]').value = z.strava;
     form.querySelector('[name="obrazky"]').value = z.obrazky;
@@ -338,6 +362,10 @@ function stornujUpravuZajezdu() {
     
     const form = document.querySelector('#tab-zajezdy form');
     form.reset();
+    
+    // Reset zobrazeného textu v modální komponentě destinace
+    const triggerText = document.getElementById('admin-dest-trigger-text');
+    if (triggerText) triggerText.textContent = 'Vyberte destinaci';
     
     document.getElementById('btn-zajezd-submit').textContent = 'Přidat zájezd';
     document.getElementById('btn-zajezd-storno').classList.add('skryte');
