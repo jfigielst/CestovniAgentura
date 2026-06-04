@@ -80,11 +80,19 @@
 
                     <div class="zajezd-detail__formular-polozka">
                         <label for="pocet_osob" class="zajezd-detail__formular-label">Počet osob</label>
-                        <select name="pocet_osob" id="pocet_osob" class="zajezd-detail__formular-select">
-                            <?php for ($i = 1; $i <= 10; $i++): ?>
-                                <option value="<?= $i ?>" <?= $i === 2 ? 'selected' : '' ?>><?= $i ?> <?= $i === 1 ? 'osoba' : ($i < 5 ? 'osoby' : 'osob') ?></option>
-                            <?php endfor; ?>
-                        </select>
+                        <?php 
+                        $prefix = 'detail-pocet-osob';
+                        $nadpis = 'Počet osob';
+                        $dataOsob = [];
+                        for ($i = 1; $i <= 10; $i++) {
+                            $dataOsob[$i] = $i . ' ' . ($i === 1 ? 'osoba' : ($i < 5 ? 'osoby' : 'osob'));
+                        }
+                        $data = $dataOsob;
+                        $isMulti = false;
+                        $inputName = 'pocet_osob';
+                        $defaultText = '2 osoby';
+                        include 'komponenty/vyber_obecny.phtml'; 
+                        ?>
                     </div>
 
                     <button type="submit" class="tlacitko tlacitko--primarni zajezd-detail__rezervovat-tlacitko" <?= empty($terminy) ? 'disabled' : '' ?>>
