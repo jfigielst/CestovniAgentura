@@ -12,7 +12,6 @@
                     <ul class="destinace-card__mesta-list">
                         <?php foreach ($mesta as $mesto): ?>
                             <li class="destinace-card__mesto-polozka">
-                                <span>🌴</span>
                                 <a href="/zajezdy?destinace=<?= $mesto['id_destinace'] ?>" class="destinace-card__mesto-odkaz">
                                     <?= htmlspecialchars($mesto['nazev_mesta']) ?>
                                 </a>
