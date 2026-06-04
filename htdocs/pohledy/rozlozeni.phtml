@@ -50,7 +50,8 @@
         <p>&copy; <?= date("Y") ?> Venturo cestovní kancelář | <a href="/uvod#kontakt">Kontakt</a></p>
     </footer>
 
-    <?php if ($this->kontroler instanceof UvodKontroler || $this->kontroler instanceof ZajezdyKontroler) { ?>
+    <?php if ($this->kontroler instanceof UvodKontroler || $this->kontroler instanceof ZajezdyKontroler || $this->kontroler instanceof AdministraceKontroler) { ?>
+        <script src="/js/vyber_destinace.js"></script>
         <script src="/js/uvod.js?v=<?= time() ?>"></script>
     <?php } ?>
 </body>
