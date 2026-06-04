@@ -17,9 +17,9 @@
             
             <div class="hlavicka__uzivatel">
                 <?php if (!empty($this->prihlasenyUzivatel)) { ?>
-                    <span><?= htmlspecialchars($this->prihlasenyUzivatel["jmeno"] . " " . $this->prihlasenyUzivatel["prijmeni"]) ?></span>
-                    <a href="/uvod#ucet">Můj účet</a>
-                    <a href="/uvod#rezervace">Rezervace</a>
+                    <a href="/ucet" style="font-weight: 700; color: var(--barva-modra);"><?= htmlspecialchars($this->prihlasenyUzivatel["jmeno"] . " " . $this->prihlasenyUzivatel["prijmeni"]) ?></a>
+                    <a href="/ucet">Můj účet</a>
+                    <a href="/ucet#rezervace">Rezervace</a>
                     <a href="/odhlaseni">Odhlásit se</a>
                 <?php } else { ?>
                     <a href="/prihlaseni">Přihlásit se</a>
@@ -29,7 +29,6 @@
         <div class="hlavicka__bottom">
             <nav class="navigace" aria-label="Hlavní navigace">
                 <ul>
-                    <li><a href="/uvod#uvod">Úvod</a></li>
                     <li><a href="/uvod#zajezdy">Zájezdy</a></li>
                     <li><a href="/uvod#destinace">Destinace</a></li>
                     <li><a href="/uvod#o-nas">O nás</a></li>
