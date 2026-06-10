@@ -1,0 +1,101 @@
+<section id="zajezdy" class="sekce sekce--seda sekce-min-70">
+    <h2 class="sekce__nadpis">Nabídka zájezdů</h2>
+    <p class="sekce__podnadpis">Vyberte si z našich nejoblíbenějších destinací. Filtrujte podle destinace, ceny a délky pobytu.</p>
+
+    <div class="filtry">
+        <div>
+            <label for="filtr-destinace">Destinace</label>
+            <?php 
+            $prefix = 'filtr-dest';
+            $nadpis = 'Filtrovat podle destinace';
+            $placeholder = 'Hledat destinaci...';
+            $data = $destinace_podle_statu;
+            $isMulti = true; // Ve filtru můžeme umožnit více
+            $inputName = 'filtr-destinace'; // Není to sice odesílané klasicky, ale uvod.js reaguje na změnu id
+            $defaultText = 'Všechny destinace';
+            $hodnotaId = 'id_destinace';
+            $hodnotaNazev = 'nazev_mesta';
+            include 'komponenty/vyber_destinace.phtml'; 
+            ?>
+            <input type="hidden" id="filtr-destinace">
+        </div>
+        <div>
+            <label for="filtr-cena">Cena</label>
+            <?php 
+            $prefix = 'filtr-cena';
+            $nadpis = 'Vyberte cenovou relaci';
+            $data = [
+                'nizka' => 'do 15 000 Kč',
+                'stredni' => '15 000 – 30 000 Kč',
+                'vysoka' => 'nad 30 000 Kč'
+            ];
+            $isMulti = false;
+            $inputName = 'filtr-cena';
+            $defaultText = 'Všechny ceny';
+            include 'komponenty/vyber_obecny.phtml'; 
+            ?>
+        </div>
+        <div>
+            <label for="filtr-delka">Délka pobytu</label>
+            <?php 
+            $prefix = 'filtr-delka';
+            $nadpis = 'Délka pobytu';
+            $data = [
+                '7' => '7 dní',
+                '10' => '10 dní',
+                '14' => '14 dní'
+            ];
+            $isMulti = false;
+            $inputName = 'filtr-delka';
+            $defaultText = 'Libovolná délka';
+            include 'komponenty/vyber_obecny.phtml'; 
+            ?>
+        </div>
+    </div>
+
+    <div class="karty">
+        <?php if (!empty($zajezdy)): ?>
+            <?php foreach ($zajezdy as $z): ?>
+                <?php
+                    // Určení cenové kategorie pro filter (nizka: < 15k, stredni: 15-30k, vysoka: > 30k)
+                    $cenovaKategorie = 'nizka';
+                    if ($z['cena'] >= 30000) {
+                        $cenovaKategorie = 'vysoka';
+                    } elseif ($z['cena'] >= 15000) {
+                        $cenovaKategorie = 'stredni';
+                    }
+                    
+                    // Určení délky pobytu (výpočet z prvního termínu)
+                    $delkaPobytu = 7; // výchozí
+                    if (!empty($z['terminy'])) {
+                        $datetime1 = new DateTime($z['terminy'][0]['datum_od']);
+                        $datetime2 = new DateTime($z['terminy'][0]['datum_do']);
+                        $interval = $datetime1->diff($datetime2);
+                        $delkaPobytu = $interval->days;
+                    }
+                ?>
+                <div class="karta" data-zajezd data-destinace="<?= htmlspecialchars($z['id_destinace']) ?>" data-stat="<?= htmlspecialchars($z['stat']) ?>" data-cena="<?= $cenovaKategorie ?>" data-delka="<?= $delkaPobytu ?>">
+                    <div class="karta__obrazek" style="background-image: url('<?= htmlspecialchars($z['obrazky'] ? $z['obrazky'] : '/images/noimage.png') ?>');"></div>
+                    <div class="karta__telo">
+                        <h3><?= htmlspecialchars($z['hotel']) ?></h3>
+                        <p class="karta__meta">📍 <?= htmlspecialchars($z['destinace']) ?>, <?= htmlspecialchars($z['stat']) ?></p>
+                        <div class="karta__tagy">
+                            <span class="tag"><?= htmlspecialchars($z['strava']) ?></span>
+                            <span class="tag"><?= $delkaPobytu ?> dní</span>
+                        </div>
+                        <p class="karta__popis">
+                            <?= htmlspecialchars($z['popis']) ?>
+                        </p>
+                        <div class="karta__cena"><?= number_format($z['cena'], 0, ',', ' ') ?> Kč</div>
+                        <a href="/detail-zajezdu/<?= $z['id_zajezdu'] ?>" class="tlacitko tlacitko--primarni tlacitko--blok">Zobrazit zájezd</a>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p class="karty-empty">
+                Momentálně nejsou v nabídce žádné zájezdy.
+            </p>
+        <?php endif; ?>
+    </div>
+
+</section>

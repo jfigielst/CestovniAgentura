@@ -1,0 +1,27 @@
+<section class="sekce sekce--seda sekce--auth">
+    <div class="auth-box auth-box--login">
+        <h2 class="auth-box__nadpis">Přihlášení</h2>
+        
+        <?php if (isset($chyba)) : ?>
+            <div class="upozorneni upozorneni--chyba">
+                <strong><?= htmlspecialchars($chyba) ?></strong>
+            </div>
+        <?php endif; ?>
+
+        <form class="formular" method="post" action="/prihlaseni">
+            <label>
+                E-mail
+                <input type="email" name="email" required autocomplete="email" />
+            </label>
+            <label>
+                Heslo
+                <input type="password" name="heslo" required autocomplete="current-password" />
+            </label>
+            <button type="submit" class="tlacitko tlacitko--primarni tlacitko--plna-sirka">Přihlásit se</button>
+        </form>
+
+        <p class="auth-box__text-dolni">
+            Nemáte účet? <a href="/registrace">Zaregistrujte se</a>
+        </p>
+    </div>
+</section>

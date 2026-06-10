@@ -1,0 +1,84 @@
+<?php
+$jePrihlasen = !empty($this->prihlasenyUzivatel);
+?>
+
+<div class="sekce">
+    <div class="hledani-kontejner">
+        
+        <div class="hledani-zahlavi">
+            <h1 class="hledani-titulek">Výsledky vyhledávání pro: <?= htmlspecialchars($hledanyNazev) ?></h1>
+            <p>
+                <strong>Odlet z letiště:</strong> <?= htmlspecialchars($hledanaLetiste) ?> |
+                <strong>Termín odjezdu od:</strong> <?= htmlspecialchars($termin) ?> | 
+                <strong>Dospělí:</strong> <?= htmlspecialchars($dospeli) ?>
+                <?php if ($deti > 0): ?>
+                    | <strong>Děti:</strong> <?= htmlspecialchars($deti) ?>
+                <?php endif; ?>
+            </p>
+        </div>
+
+        <?php if (!empty($chyba) && empty($hotely)): ?>
+            <div class="hledani-chyba">
+                <?= htmlspecialchars($chyba) ?>
+            </div>
+            <div class="hledani-chyba-tlacitko-obal">
+                <a href="/uvod" class="tlacitko tlacitko--primarni">Zpět na vyhledávání</a>
+            </div>
+        <?php endif; ?>
+
+        <?php if (!empty($hotely)): ?>
+            <div class="hledani-karty">
+                <?php foreach ($hotely as $hotel): ?>
+                    <?php 
+                        $foto = !empty($hotel['obrazky']) ? $hotel['obrazky'] : '/images/noimage.png';
+                        $delkaPobytu = 7;
+                        if (!empty($hotel['datum_od']) && !empty($hotel['datum_do'])) {
+                            $datetime1 = new DateTime($hotel['datum_od']);
+                            $datetime2 = new DateTime($hotel['datum_do']);
+                            $interval = $datetime1->diff($datetime2);
+                            $delkaPobytu = $interval->days;
+                        }
+                    ?>
+                    <div class="hledani-karta">
+                        <div class="hledani-karta__obrazek" style="background-image: url('<?= htmlspecialchars($foto) ?>');"></div>
+                        <div class="hledani-karta__telo">
+                            <h3 class="hledani-karta__nazev"><?= htmlspecialchars($hotel['hotel']) ?></h3>
+                            <p class="hledani-karta__lokace">
+                                Místo: <?= htmlspecialchars($hotel['destinace']) ?>, <?= htmlspecialchars($hotel['stat']) ?>
+                            </p>
+                            <p class="hledani-karta__termin">
+                                Termín: <?= date('d.m.Y', strtotime($hotel['datum_od'])) ?> – <?= date('d.m.Y', strtotime($hotel['datum_do'])) ?> (<?= $delkaPobytu ?> dní)
+                            </p>
+                            <p class="hledani-karta__letiste">
+                                Odletové letiště: <?= htmlspecialchars($hotel['odlet_mesto'] ? $hotel['odlet_mesto'] . ' (' . $hotel['odlet_iata'] . ')' : 'Vlastní doprava') ?>
+                            </p>
+                            <p class="hledani-karta__popis">
+                                <?= htmlspecialchars($hotel['popis']) ?>
+                            </p>
+                            
+                            <div class="hledani-karta__tagy">
+                                <span class="tag"><?= htmlspecialchars($hotel['strava']) ?></span>
+                            </div>
+
+                             <div class="hledani-karta__paticka">
+                                 <span class="hledani-karta__cena"><?= number_format($hotel['cena'], 0, ',', ' ') ?> Kč</span>
+                                 <?php if ($jePrihlasen): ?>
+                                     <form method="POST" action="/kontakt">
+                                         <input type="hidden" name="id_terminu" value="<?= $hotel['id_terminu'] ?>">
+                                         <input type="hidden" name="hotel" value="<?= htmlspecialchars($hotel['hotel']) ?>">
+                                         <input type="hidden" name="termin" value="<?= date('d.m.Y', strtotime($hotel['datum_od'])) ?> – <?= date('d.m.Y', strtotime($hotel['datum_do'])) ?>">
+                                         <input type="hidden" name="pocet_osob" value="<?= (int)($dospeli + $deti) ?>">
+                                         <button type="submit" class="tlacitko tlacitko--primarni hledani-karta__btn-rezervovat">Rezervovat</button>
+                                     </form>
+                                 <?php else: ?>
+                                     <a href="/prihlaseni" class="tlacitko tlacitko--outline hledani-karta__btn-prihlasit">Přihlásit se pro rezervaci</a>
+                                 <?php endif; ?>
+                             </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+    </div>
+</div>
