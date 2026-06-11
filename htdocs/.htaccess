@@ -1,8 +1,0 @@
-RewriteEngine On
-
-# Pokud soubor nebo složka reálně existuje (např. obrázky, CSS, JS), přesměrování se neprovede
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-
-# Všechny ostatní požadavky (např. /hledani) se pošlou na index.php
-RewriteRule ^(.*)$ index.php [QSA,L]
