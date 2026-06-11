@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+    <base href="/">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venturo – cestovní kancelář</title>
+    <link rel="stylesheet" href="/css/style.css?v=<?= time() ?>">
+</head>
+
+<body>
+    <header class="hlavicka">
+        <div class="hlavicka__top">
+            <a href="/uvod" class="logo"><img src="/images/logo.png" alt="Venturo CK" class="hlavicka__logo-img"></a>
+            
+            <div class="hlavicka__uzivatel">
+                <?php if (!empty($this->prihlasenyUzivatel)) { ?>
+                    <a href="/ucet" class="hlavicka__uzivatel-jmeno"><?= htmlspecialchars($this->prihlasenyUzivatel["jmeno"] . " " . $this->prihlasenyUzivatel["prijmeni"]) ?></a>
+                    <?php if ($this->prihlasenyUzivatel['role'] === 'admin') { ?>
+                        <a href="/administrace" class="hlavicka__admin-odkaz">Administrace</a>
+                    <?php } ?>
+                    <a href="/ucet/rezervace">Rezervace</a>
+                    <a href="/odhlaseni">Odhlásit se</a>
+                <?php } else { ?>
+                    <a href="/prihlaseni">Přihlásit se</a>
+                <?php } ?>
+            </div>
+        </div>
+        <div class="hlavicka__bottom">
+            <nav class="navigace" aria-label="Hlavní navigace">
+                <ul>
+                    <li><a href="/zajezdy">Zájezdy</a></li>
+                    <li><a href="/destinace">Destinace</a></li>
+                    <li><a href="/o-nas">O nás</a></li>
+                    <li><a href="/kontakt">Kontakt</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <?php
+        $this->kontroler->vypisPohled();
+        ?>
+    </main>
+
+    <footer class="pata">
+        <p>&copy; <?= date("Y") ?> Venturo cestovní kancelář | <a href="/uvod#kontakt">Kontakt</a></p>
+    </footer>
+
+    <script src="/js/vyber_destinace.js?v=<?= time() ?>"></script>
+    <script src="/js/uvod.js?v=<?= time() ?>"></script>
+</body>
+
+</html>
